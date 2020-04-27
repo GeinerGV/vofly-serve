@@ -15,5 +15,15 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+    return response()->json([
+        "user"=>$request->user(),
+        "api_token"=> Str::random(60),
+        #"current"=>Route::current(),
+        #"currentRouteName"=>Route::currentRouteName(),
+        #"currentRouteAction"=>Route::currentRouteAction(),
+    ]);
+});
+Route::group(['middleware' => 'fromapp'], function() {
+    Route::post('login', 'Auth\Api\LoginController@login');
+    Route::post('register', 'Auth\RegisterController@register');
 });

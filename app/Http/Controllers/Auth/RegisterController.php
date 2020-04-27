@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers\Auth;
 
+use \Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use App\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
@@ -64,10 +67,41 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+        $token = Str::random(60);
+
         return User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
+            'api_token' => hash('sha256', $token),
         ]);
+    }
+
+    /**
+     * The user has been registered.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  App\User $user
+     * @return mixed
+     */
+    protected function registered(Request $request, $user)
+    {
+        $success['user'] = $user;
+        return $request->wantsJson()
+                    ? response()->json(['success'=>$success], 200)
+                    : redirect($this->redirectPath());
+        /* $this->validator($request->all())->validate();
+
+        event(new Registered($user = $this->create($request->all())));
+
+        $this->guard()->login($user);
+
+        if ($response = $this->registered($request, $user)) {
+            return $response;
+        }
+        $success['user'] = $user;
+        return $request->wantsJson()
+                    ? response()->json(['success'=>$success], 200)
+                    : new Response('', 201); */
     }
 }
