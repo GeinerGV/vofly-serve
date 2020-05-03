@@ -32,5 +32,8 @@
         "test": "tests"
     },
     "author": "GeinerGV",
-    "license": "ISC"
+    "license": "ISC",
+    "dependencies": {
+        "react-router-dom": "^5.1.2"
+    }
 }
