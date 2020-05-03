@@ -9,7 +9,7 @@
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
 
-        <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+        <link href="{{ mix('css/app.css') }}" rel="stylesheet">
     </head>
     <body>
         <div id="app"></div>
@@ -46,6 +46,6 @@
                 <li></li>
             </ul>
         </div>
-        <script src="{{ asset('js/app.js') }}" type="text/javascript"></script>
+        <script src="{{ mix('js/app.js') }}" type="text/javascript"></script>
     </body>
 </html>
