@@ -6,7 +6,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable implements MustVerifyEmail
+class User extends Authenticatable //implements MustVerifyEmail
 {
     use Notifiable;
 
@@ -16,7 +16,7 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', "api_token", "phone"
+        'name', "api_token", "phone", "direccion"
     ];
 
     /**
@@ -36,4 +36,15 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    protected static $AvatarDirStorage = "avatars/";
+
+    /**
+     * Get Avatar pathname
+     * 
+     * @return String ruta del archivo
+     */
+    public function getAvatarPathname() {
+        return static::AvatarDirStorage . $this->id;
+    }
 }
