@@ -16,8 +16,10 @@ class User extends Authenticatable //implements MustVerifyEmail
      * @var array
      */
     protected $fillable = [
-        'name', "api_token", "phone", "direccion"
+        'name', "phone", "direccion",
     ];
+    
+    //protected $guarded = ["api_token"];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -25,7 +27,7 @@ class User extends Authenticatable //implements MustVerifyEmail
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password', 'remember_token', "api_token"
     ];
 
     /**

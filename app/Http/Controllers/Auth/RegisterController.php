@@ -41,9 +41,9 @@ class RegisterController extends Controller
      */
     public function __construct()
     {
-        error_log('REGISTRO LOG PARENT');
+        //error_log('REGISTRO LOG PARENT');
         $this->middleware('guest');
-        error_log('REGISTRO LOG PARENT GUESTED');
+        //error_log('REGISTRO LOG PARENT GUESTED');
     }
 
     /**
@@ -54,14 +54,6 @@ class RegisterController extends Controller
      */
     protected function validator(array $data)
     {
-        error_log('REGISTRO LOG validator init');
-        $val = Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
-            'phone' => ['required', 'string', 'min:9', "max:9", 'unique:users'],
-            'direccion' => ['required', 'string', 'max:255'],
-		]);
-        error_log('REGISTRO LOG validated');
-        return $val;
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
