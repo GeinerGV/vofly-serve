@@ -14,10 +14,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
+Route::middleware('auth:api')->post('/user', function (Request $request) {
     return response()->json([
         "user"=>$request->user(),
-        "api_token"=> Str::random(60),
+        //"api_token"=> Str::random(60),
         #"current"=>Route::current(),
         #"currentRouteName"=>Route::currentRouteName(),
         #"currentRouteAction"=>Route::currentRouteAction(),

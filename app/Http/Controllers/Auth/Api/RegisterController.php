@@ -122,7 +122,7 @@ class RegisterController extends Controller
 			$result['status'] = 'NEW_CODE_SENDED';
 			$result['data'] = $verify->send($request->phone);
 		}
-
+		error_log(json_encode($result));
 		return response()->json($result, 200);
     }
 
