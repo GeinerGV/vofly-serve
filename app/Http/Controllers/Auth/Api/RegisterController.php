@@ -22,6 +22,36 @@ use Illuminate\Auth\Events\Registered;
 class RegisterController extends Controller
 {
 
+	/**
+	 * Evaluar si está registrado o preregistrado o ninguno.
+	 * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+	 */
+	public function evaluateSignAuthCachedData(Request $request) {
+
+		# Validator
+		Validator::make($request->all(), [
+			'verify_id' => array_merge(
+				VerifyPhone::VERIFY_ID_BASIC_VALIDATE_RULES, VerifyPhone::VERIFY_ID_EXITS_VALIDATE_RULES
+			),
+			'phone' => array_merge(['required'], User::PHONE_BASIC_VALIDATE_RULES),
+			'email' => array_merge(['required'], User::EMAIL_BASIC_VALIDATE_RULES),
+		])->validate();
+
+		#
+		$data = [];
+		$user = User::where('phone', $request->phone)->where('email', $request->email)->first();
+		$data['registered'] = !!$user;
+		if ($request->filled('verify_id')) {
+			$phone = VerifyPhone::getVerifyPhone($request->verify_id);
+			if ($phone) {
+				$data['preregistered'] = !$data['registered'];
+				$data['verify_id_data'] = $phone;
+			}
+		}
+		return response()->json(['data'=>$data], 200);
+	}
+
     /**
      * Get a validator for an incoming preregistration request.
      *
@@ -32,12 +62,57 @@ class RegisterController extends Controller
     {
 		//error_log('REGISTRO LOG prevalidator init');
         return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
-            'phone' => ['required', 'digits_between:9,11', 'unique:users'],
-            'direccion' => ['required', 'string', 'max:255'],
-			'verify_id' => ['uuid', 'exists:verify_phones'],
+            'name' => array_merge(['required'], User::NAME_BASIC_VALIDATE_RULES),
+            'phone' => array_merge(['required'], User::PHONE_BASIC_VALIDATE_RULES, ['unique:users']),
+            'direccion' => array_merge(['required'], User::DIRECCION_BASIC_VALIDATE_RULES),
+			'verify_id' => array_merge(
+				VerifyPhone::VERIFY_ID_BASIC_VALIDATE_RULES, VerifyPhone::VERIFY_ID_EXITS_VALIDATE_RULES
+			),
+			'email' => array_merge(['required'], User::EMAIL_BASIC_VALIDATE_RULES),
         ]);
 	}
+
+	/**
+     * Handle a preregistration request for the application.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function preregister(Request $request)
+    {
+        $this->prevalidator($request->all())->validate();
+		$result = [];
+		if ($request->filled('verify_id') && $phone = VerifyPhone::getVerifyPhone($request->verify_id)) {
+			#if ($phone = VerifyPhone::getVerifyPhone($request->verify_id)) {
+				if ($phone->phone == $request->phone && $phone->isAvailableCode()) {
+					$result['data'] = $phone;
+				} else {
+					$phone->phone = $request->phone;
+					$result['data'] = $phone->resend();
+				}
+				$result['status'] =  $phone->getStatus();
+			#}
+		} else {
+				
+		#if ( !isset($result['status']) ) {
+			$count = VerifyPhone::where('phone', $request->phone)
+						->whereDate('created_at', '>', Date::now()->addDay(-1))
+						->count();
+
+			Validator::make([
+					VerifyPhone::KEYRULE_REGISTER_TRIES_PHONE_DAY => $count // data
+				], [
+				VerifyPhone::KEYRULE_REGISTER_TRIES_PHONE_DAY => array_merge(
+					['required'], VerifyPhone::REGISTER_TRIES_PHONE_DAY_BASIC_VALIDATE_RULES // rules
+				),
+			])->validate();
+
+			$result['data'] = VerifyPhone::send($request->phone, $request->ip());
+			$result['status'] = $result['data']->getStatus();
+		}
+		//error_log(json_encode($result));
+		return response()->json($result, 200);
+    }
 
 	/**
      * Get a validator for an incoming registration request.
@@ -49,10 +124,14 @@ class RegisterController extends Controller
     {
 		//error_log('REGISTRO LOG validator init');
         return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
-            'direccion' => ['required', 'string', 'max:255'],
-			'code' => ['required', 'digits:6'],
-			'verify_id' => ['required', 'uuid', 'exists:verify_phones,verify_id,deleted_at,NULL'],
+            'name' => array_merge(['required'], User::NAME_BASIC_VALIDATE_RULES),
+            'direccion' => array_merge(['required'], User::DIRECCION_BASIC_VALIDATE_RULES),
+			'verify_id' => array_merge(
+				['required'],
+				VerifyPhone::VERIFY_ID_BASIC_VALIDATE_RULES, VerifyPhone::VERIFY_ID_EXITS_VALIDATE_RULES
+			),
+			'email' => array_merge(['required'], User::EMAIL_BASIC_VALIDATE_RULES),
+			'code' => array_merge(['required'], VerifyPhone::CODE_BASIC_VALIDATE_RULES),
         ]);
 	}
 	
@@ -69,7 +148,8 @@ class RegisterController extends Controller
 		$newUser = User::create([
 			'name' => $data['name'],
 			'phone' => $data['phone'],
-			"direccion" => $data['direccion'],
+			'direccion' => $data['direccion'],
+			'email' => $data['email'],
 			//'api_token' => hash('sha256', $token),
 		]);
 
@@ -89,44 +169,6 @@ class RegisterController extends Controller
 	}
 
 	/**
-     * Handle a preregistration request for the application.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function preregister(Request $request)
-    {
-        $this->prevalidator($request->all())->validate();
-		$result = [];
-		if ($request->filled('verify_id')) {
-			if ($phone = VerifyPhone::firstWhere('verify_id', $request->verify_id)) {
-				if ($phone->phone == $request->phone && strtotime($phone->updated_at)>=time()-5*60) {
-					$result['status'] = 'WAIT_YOUR_CONFIRMATION';
-					$result['data'] = $phone;
-				} else {
-					$phone->phone = $request->phone;
-					$result['status'] = 'NEW_CODE_SENDED';
-					$result['data'] = $phone->resend();
-				}
-			}
-		}
-				
-		if ( !isset($result['status']) ) {
-			$count = VerifyPhone::where('phone', $request->phone)->whereDate('created_at', '>', Date::now()->addDay(-1))->count();
-			Validator::make(['phone_verifying_tries'=>$count], [
-				'phone_verifying_tries' => ['integer', 'max:9']
-			])->validate();
-
-			$verify = new VerifyPhone;
-			$verify->ip = $request->ip();
-			$result['status'] = 'NEW_CODE_SENDED';
-			$result['data'] = $verify->send($request->phone);
-		}
-		error_log(json_encode($result));
-		return response()->json($result, 200);
-    }
-
-	/**
      * Handle a registration request for the application.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -136,22 +178,22 @@ class RegisterController extends Controller
     {
         $this->validator($request->all())->validate();
 		$result = [];
-		if ($phone = VerifyPhone::confirmPhone($request->verify_id, $request->code)) {
+		if ($phone_number = VerifyPhone::getConfirmedPhoneNumber($request->verify_id, $request->code)) {
 			event(new Registered($user = $this->create(
-				array_merge($request->all(), ['phone'=>$phone])
+				array_merge($request->all(), ['phone'=>$phone_number])
 			)));
 			$this->guard()->login($user);
 			$result['status'] = 'REGISTERED';
 			$result['data'] = array_merge($user->toArray(), ['api_token'=>$user->api_token]);
-		} elseif (is_null($phone)) {
-			$result['status'] = 'INVALID_CODE';
+		} elseif (is_null($phone_number)) {
+			$result['status'] = VerifyPhone::STATUS_INVALID_CODE;
 			$result['messsage'] = "El código no es válido";
 			//$result['error'] = "INVALID_CODE";
 		} else {
-			$result['status'] = 'EXPIRED_CODE';
+			$result['status'] = VerifyPhone::STATUS_EXPIRED_CODE;
 			$result['messsage'] = "El código ha expirado";
-			$result['tmp_phone'] = $phone;
+			$result['tmp_phone'] = $phone_number;
 		}
 		return response()->json($result, 200);
-    }
+	}
 }

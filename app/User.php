@@ -39,14 +39,28 @@ class User extends Authenticatable //implements MustVerifyEmail
         'email_verified_at' => 'datetime',
     ];
 
-    protected static $AvatarDirStorage = "avatars/";
+	public function savedPlaces() {
+		return $this->morphMany('App\Place', 'ubicable');
+	}
+
+
+
+    protected const AvatarDirStorage = "avatars/";
 
     /**
      * Get Avatar pathname
      * 
-     * @return String ruta del archivo
+     * @return string
      */
     public function getAvatarPathname() {
         return static::AvatarDirStorage . $this->id;
     }
+
+    public const EMAIL_BASIC_VALIDATE_RULES = ['string', 'email', 'max:255'];
+
+    public const PHONE_BASIC_VALIDATE_RULES = ['digits_between:9,11'];
+
+    public const NAME_BASIC_VALIDATE_RULES = ['string', 'max:255'];
+
+    public const 	DIRECCION_BASIC_VALIDATE_RULES = ['string', 'max:255'];
 }

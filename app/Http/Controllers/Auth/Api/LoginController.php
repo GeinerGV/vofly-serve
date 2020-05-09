@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth\Api;
 use App\Http\Controllers\Auth\LoginController as Controller;
 use \Illuminate\Http\Request;
 use \Illuminate\Http\Response;
+use Illuminate\Support\Facades\Validator;
 
 class LoginController extends Controller
 {
