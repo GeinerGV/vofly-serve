@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDriversTable extends Migration
+class CreateListaComprasTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,9 @@ class CreateDriversTable extends Migration
      */
     public function up()
     {
-        Schema::create('drivers', function (Blueprint $table) {
-            $table->integer('user_id')->unsigned();
-			$table->string('dni', 8);
+        Schema::create('lista_compras', function (Blueprint $table) {
+            $table->integerIncrements('id');
             $table->timestamps();
-			#Constraints
-			$table->primary('user_id');
-			$table->foreign('user_id')->references('id')->on('users');
         });
     }
 
@@ -30,6 +26,6 @@ class CreateDriversTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('drivers');
+        Schema::dropIfExists('lista_compras');
     }
 }

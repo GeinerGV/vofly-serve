@@ -32,6 +32,7 @@ class RegisterController extends Controller
 		# Validator
 		Validator::make($request->all(), [
 			'verify_id' => array_merge(
+				['required'],
 				VerifyPhone::VERIFY_ID_BASIC_VALIDATE_RULES, VerifyPhone::VERIFY_ID_EXITS_VALIDATE_RULES
 			),
 			'phone' => array_merge(['required'], User::PHONE_BASIC_VALIDATE_RULES),
@@ -39,17 +40,18 @@ class RegisterController extends Controller
 		])->validate();
 
 		#
-		$data = [];
-		$user = User::where('phone', $request->phone)->where('email', $request->email)->first();
-		$data['registered'] = !!$user;
-		if ($request->filled('verify_id')) {
-			$phone = VerifyPhone::getVerifyPhone($request->verify_id);
-			if ($phone) {
-				$data['preregistered'] = !$data['registered'];
-				$data['verify_id_data'] = $phone;
-			}
+		$result = [];
+		$verify= VerifyPhone::getVerifyPhone($request->verify_id);
+		#
+		if ($request->phone==$verify->phone) {
+			$result['data'] = [];
+			$user = User::where('phone', $request->phone)->where('email', $request->email)->first();
+			$result['data']['preregistered'] = !$user;
+			$result['data']['verify_data'] = $verify;
+		} else {
+			$result['message'] = 'Diferentes números';
 		}
-		return response()->json(['data'=>$data], 200);
+		return response()->json($result, 200);
 	}
 
     /**
@@ -80,22 +82,25 @@ class RegisterController extends Controller
      */
     public function preregister(Request $request)
     {
-        $this->prevalidator($request->all())->validate();
+		$request_phone = strlen($request->phone)==9 ? '51' . $request->phone : $request->phone;
+        $this->prevalidator(
+			array_merge($request->all(), ['phone'=> $request_phone])
+		)->validate();
 		$result = [];
 		if ($request->filled('verify_id') && $phone = VerifyPhone::getVerifyPhone($request->verify_id)) {
 			#if ($phone = VerifyPhone::getVerifyPhone($request->verify_id)) {
-				if ($phone->phone == $request->phone && $phone->isAvailableCode()) {
+				if ($phone->phone == $request_phone && $phone->isAvailableCode()) {
 					$result['data'] = $phone;
 				} else {
-					$phone->phone = $request->phone;
-					$result['data'] = $phone->resend();
+					$phone->phone = $request_phone;
+					$result['data'] = $phone->resend($request->ip());
 				}
 				$result['status'] =  $phone->getStatus();
 			#}
 		} else {
 				
 		#if ( !isset($result['status']) ) {
-			$count = VerifyPhone::where('phone', $request->phone)
+			$count = VerifyPhone::where('phone', $request_phone)
 						->whereDate('created_at', '>', Date::now()->addDay(-1))
 						->count();
 
@@ -103,11 +108,13 @@ class RegisterController extends Controller
 					VerifyPhone::KEYRULE_REGISTER_TRIES_PHONE_DAY => $count // data
 				], [
 				VerifyPhone::KEYRULE_REGISTER_TRIES_PHONE_DAY => array_merge(
-					['required'], VerifyPhone::REGISTER_TRIES_PHONE_DAY_BASIC_VALIDATE_RULES // rules
+					['required'],
+					VerifyPhone::REGISTER_TRIES_PHONE_DAY_BASIC_VALIDATE_RULES, // rules
+					['max:' . (VerifyPhone::MAX_REGISTER_TRIES_PER_DAY_PER_PHONE - 1)],
 				),
 			])->validate();
 
-			$result['data'] = VerifyPhone::send($request->phone, $request->ip());
+			$result['data'] = VerifyPhone::send($request_phone, $request->ip());
 			$result['status'] = $result['data']->getStatus();
 		}
 		//error_log(json_encode($result));

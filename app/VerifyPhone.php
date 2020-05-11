@@ -51,16 +51,18 @@ class VerifyPhone extends Model
 		return $this->getStatus();
 	}
 
-	protected $appends = ['status'];
+	public function getAvailableAttribute() {
+		return $this->isAvailableCode();
+	}
 
-	
+	protected $appends = ['status', 'available'];
 	
 	public static function generate6Code() {
 		return rand(10, 99) . '' . rand(1000, 9999);
 	}
 
     protected $fillable = [
-        "verify_id", "phone", "code", "reintentos", 'status'
+        "verify_id", "phone", "code", "reintentos"
     ];
 
     //protected $table = 'verify_phones';
@@ -70,7 +72,6 @@ class VerifyPhone extends Model
 
 	protected $attributes = [
 		'reintentos' => 0,
-		'status' => '',
 	];
 
 	protected function sendVerifationMessage() {
@@ -86,7 +87,7 @@ class VerifyPhone extends Model
 		$this->phone = $phone;
 		$this->verify_id = Str::uuid();
 		$this->code = static::generate6Code();
-		#$message = $this->sendVerifationMessage();
+		//$message = $this->sendVerifationMessage();
 		$this->status = static::STATUS_NEW_CODE_SENDED;
 		$this->save();
 		return $this;
@@ -99,7 +100,7 @@ class VerifyPhone extends Model
 
 	}
 
-	public function resend() {
+	public function resend(string $ip) {
 		Validator::make($this->getAttributes(), [
 			'phone' => ['required', 'digits_between:9,11'],
 			'reintentos' =>['required', 'integer', 'max:3']
@@ -111,7 +112,7 @@ class VerifyPhone extends Model
 		$this->save();
 		return $this # $message;*/
 		$this->status = static::STATUS_NEW_CODE_SENDED;
-		return $this->send($this->phone);
+		return $this->send($this->phone, $ip);
 	}
 
 	private function generateStatus() {
@@ -162,7 +163,7 @@ class VerifyPhone extends Model
 		if ($verify_phone = static::getVerifyModelConfirmed($verify_id, $code)) {
 			$result = $verify_phone->isConfirmed() ? $verify_phone->phone : "" ;
 			$verify_phone->delete();
-			return $verify_phone;
+			return $result;
 		}
 		return null;
 	}
@@ -193,7 +194,5 @@ class VerifyPhone extends Model
 
 	public const KEYRULE_REGISTER_TRIES_PHONE_DAY = 'phone_verifying_tries';
 
-	public const REGISTER_TRIES_PHONE_DAY_BASIC_VALIDATE_RULES = ['integer',
-			'max:' . (static::MAX_REGISTER_TRIES_PER_DAY_PER_PHONE - 1)
-	];
+	public const REGISTER_TRIES_PHONE_DAY_BASIC_VALIDATE_RULES = ['integer'];
 }
