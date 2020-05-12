@@ -87,7 +87,7 @@ class VerifyPhone extends Model
 		$this->phone = $phone;
 		$this->verify_id = Str::uuid();
 		$this->code = static::generate6Code();
-		//$message = $this->sendVerifationMessage();
+		$message = $this->sendVerifationMessage();
 		$this->status = static::STATUS_NEW_CODE_SENDED;
 		$this->save();
 		return $this;
