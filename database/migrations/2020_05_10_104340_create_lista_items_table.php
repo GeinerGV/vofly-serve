@@ -13,7 +13,7 @@ class CreateListaItemsTable extends Migration
      */
     public function up()
     {
-        Schema::create('lista_items', function (Blueprint $table) {
+        /*Schema::create('lista_items', function (Blueprint $table) {
             $table->integerIncrements('id');
 			$table->string('nombre', 255);
 			$table->tinyInteger('cantidad')->unsigned();
@@ -22,7 +22,7 @@ class CreateListaItemsTable extends Migration
             $table->timestamps();
 
 			$table->foreign('lista_compra_id')->references('lista_compras')->on('id');
-        });
+        });*/
     }
 
     /**

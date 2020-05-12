@@ -13,7 +13,7 @@ class CreatePlacesTable extends Migration
      */
     public function up()
     {
-        Schema::create('places', function (Blueprint $table) {
+        /*Schema::create('places', function (Blueprint $table) {
             $table->id();
 			$table->string('latitud');
 			$table->string('longitud');
@@ -23,7 +23,7 @@ class CreatePlacesTable extends Migration
 			$table->integer('ubicable_id')->unsigned();
 			$table->string('ubicable_type');
             $table->timestamps();
-        });
+        });*/
     }
 
     /**
