@@ -95,7 +95,7 @@ class VerifyPhone extends Model
 		$this->code = static::generate6Code();
 		$this->message = $this->sendVerifationMessage();
 		$this->status = static::STATUS_NEW_CODE_SENDED;
-		if ($this->message && isset($this->message->error)) {
+		if ($this->message && !isset($this->message->error)) {
 			$this->save();
 			return $this;
 		} else {
