@@ -29,4 +29,5 @@ Route::group(['middleware' => 'fromapp'], function() {
     Route::post('register', 'Auth\Api\RegisterController@appregister');
     Route::post('preregister', 'Auth\Api\RegisterController@preregister');
     Route::post('auth', 'Auth\Api\RegisterController@evaluateSignAuthCachedData');
+    Route::post('send', 'API\Local@sendTester');
 });

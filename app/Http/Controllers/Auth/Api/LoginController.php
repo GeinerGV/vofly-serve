@@ -41,7 +41,7 @@ class LoginController extends Controller
 						$result['data'] = $phone;
 					} else {
 						$phone->phone = $request_phone;
-						$result['data'] = $phone->resend($request->ip());
+						$result = $phone->resend($request->ip());
 					}
 					$result['status'] =  $phone->getStatus();
 				#}
@@ -62,7 +62,7 @@ class LoginController extends Controller
 					),
 				])->validate();
 
-				$result['data'] = VerifyPhone::send($request_phone, $request->ip());
+				$result = VerifyPhone::send($request_phone, $request->ip());
 				$result['status'] = $result['data']->getStatus();
 			}
 		}

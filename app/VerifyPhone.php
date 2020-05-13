@@ -38,6 +38,7 @@ class VerifyPhone extends Model
 	public const MAX_REGISTER_TRIES_PER_DAY_PER_PHONE = 10;
 
 	private $status = "";
+	private $message = null;
 
 	/**
 	 * get current $status
@@ -51,11 +52,15 @@ class VerifyPhone extends Model
 		return $this->getStatus();
 	}
 
+	public function getMessageAttribute() {
+		return $this->message;
+	}
+
 	public function getAvailableAttribute() {
 		return $this->isAvailableCode();
 	}
 
-	protected $appends = ['status', 'available'];
+	protected $appends = ['status', 'available', 'message'];
 	
 	public static function generate6Code() {
 		return rand(10, 99) . '' . rand(1000, 9999);
@@ -75,22 +80,64 @@ class VerifyPhone extends Model
 	];
 
 	protected function sendVerifationMessage() {
-		$nexmo = app('Nexmo\Client');
+		/*$nexmo = app('Nexmo\Client');
 		return $nexmo->message()->send([
 			'to' => $this->phone,
 			'from' => 'Vofly',
 			'text' => 'Tu codigo Vofly es: ' . $this->code . '. Valido por 5 minutos.'
-		]);
+		]);*/
+		return static::sendVerifationMessageLabsMobile($this->phone, $this->code);
 	}
 
 	public function sendAndSave($phone) {
 		$this->phone = $phone;
 		$this->verify_id = Str::uuid();
 		$this->code = static::generate6Code();
-		$message = $this->sendVerifationMessage();
+		$this->message = $this->sendVerifationMessage();
 		$this->status = static::STATUS_NEW_CODE_SENDED;
-		$this->save();
-		return $this;
+		if ($this->message && isset($this->message->error)) {
+			$this->save();
+			return $this;
+		} else {
+			return $this->message;
+		}
+	}
+
+	static function sendVerifationMessageLabsMobile(string $phone, string $code) {
+		#if ($phone=="51958318097") {
+			$auth_basic = base64_encode("geiner.grandez@usil.pe:fz57mn82");
+
+			$curl = curl_init();
+
+			curl_setopt_array($curl, array(
+				CURLOPT_URL => "https://api.labsmobile.com/json/send",
+				CURLOPT_RETURNTRANSFER => true,
+				CURLOPT_ENCODING => "",
+				CURLOPT_MAXREDIRS => 10,
+				CURLOPT_TIMEOUT => 30,
+				CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+				CURLOPT_CUSTOMREQUEST => "POST",
+				CURLOPT_POSTFIELDS => '{"message":"Tu codigo Vofly es: ' . $code . '. Valido por 5 minutos.",
+					"tpoa":"Vofly App",
+					"recipient":[{"msisdn":"'. $phone .'"}]}',
+				CURLOPT_HTTPHEADER => array(
+					"Authorization: Basic ".$auth_basic,
+					"Cache-Control: no-cache",
+					"Content-Type: application/json"
+				),
+			));
+
+			$response = curl_exec($curl);
+			$err = curl_error($curl);
+
+			curl_close($curl);
+
+			if ($err) {
+				return json_decode('{"message":"cURL Error", "error":' . $err . '}');
+			} else {
+				return json_decode('{"data":' . $response. '}');
+			}
+		#}
 	}
 	
 	static function send(string $phone, string $ip) {
@@ -112,7 +159,7 @@ class VerifyPhone extends Model
 		$this->save();
 		return $this # $message;*/
 		$this->status = static::STATUS_NEW_CODE_SENDED;
-		return $this->send($this->phone, $ip);
+		return $this->sendAndSave($this->phone, $ip);
 	}
 
 	private function generateStatus() {
