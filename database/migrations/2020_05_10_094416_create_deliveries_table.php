@@ -27,12 +27,12 @@ class CreateDeliveriesTable extends Migration
 			$table->integer('entrega_type')->unsigned();
 			#carga(Paquete): belongsTo
 			$table->integer('paquete_id')->unsigned();
-			$table->integer('paquete_type')->unsigned();
+			#$table->integer('paquete_type')->unsigned();
 			#pago(PagoInfo):
 			$table->integer('pago_id')->unsigned();
 			#extradata
 			$table->string('distancia')->nullable();
-			$table->string('detalles', 300)->nullable(); // Courier detail
+			$table->string('detalles_carga', 300)->nullable(); // Courier detail
 			$table->string('estado', 25)->nullable();
             $table->timestamps();
         });

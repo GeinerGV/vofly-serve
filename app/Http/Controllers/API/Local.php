@@ -9,6 +9,10 @@ use App\VerifyPhone;
 
 class Local extends Controller
 {
+	public function __construct() {
+		# middleware is local and dev
+	}
+
     public function sendTester(Request $request) {
         $request_phone = strlen($request->phone)==9 ? '51' . $request->phone : $request->phone;
         $result = [];

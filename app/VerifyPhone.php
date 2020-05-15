@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
+use App\Exceptions\SMSValidateErrorException;
 /**
  * show off @property
  * 
@@ -95,12 +95,8 @@ class VerifyPhone extends Model
 		$this->code = static::generate6Code();
 		$this->message = $this->sendVerifationMessage();
 		$this->status = static::STATUS_NEW_CODE_SENDED;
-		if ($this->message && !isset($this->message->error)) {
-			$this->save();
-			return $this;
-		} else {
-			return $this->message;
-		}
+		$this->save();
+		return $this;
 	}
 
 	static function sendVerifationMessageLabsMobile(string $phone, string $code) {
@@ -131,12 +127,10 @@ class VerifyPhone extends Model
 			$err = curl_error($curl);
 
 			curl_close($curl);
-
 			if ($err) {
-				return json_decode('{"message":"cURL Error", "error":' . $err . '}');
-			} else {
-				return json_decode('{"data":' . $response. '}');
+				throw new SMSValidateErrorException('cURL SMS Error: Error con el envío del sms. ' . $err);
 			}
+			return json_decode($response);
 		#}
 	}
 	

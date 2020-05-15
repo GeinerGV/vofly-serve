@@ -23,6 +23,13 @@ Route::middleware('auth:api')->post('/user', function (Request $request) {
         #"currentRouteAction"=>Route::currentRouteAction(),
     ]);
 });
+
+Route::group(['middleware' => 'auth:api'], function() {
+	
+});
+
+Route::apiResource('delivery', 'API\DeliveryController');
+
 Route::group(['middleware' => 'fromapp'], function() {
     Route::post('login', 'Auth\Api\LoginController@applogin');
     Route::post('prelogin', 'Auth\Api\LoginController@prelogin');

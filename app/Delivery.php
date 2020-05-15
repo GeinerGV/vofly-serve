@@ -26,8 +26,8 @@ class Delivery extends Model
 		return $this->morphTo();
 	}
 
-    public function pago() {
-		return $this->belongsTo('App\PagoInfo');
-	}
+    /*public function pago() {
+		//return $this->belongsTo('App\PagoInfo');
+	}*/
 }
-}
+
