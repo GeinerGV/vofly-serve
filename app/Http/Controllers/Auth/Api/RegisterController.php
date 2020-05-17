@@ -63,15 +63,15 @@ class RegisterController extends Controller
     protected function prevalidator(array $data)
     {
 		//error_log('REGISTRO LOG prevalidator init');
-        return Validator::make($data, [
-            'name' => array_merge(['required'], User::NAME_BASIC_VALIDATE_RULES),
-            'phone' => array_merge(['required'], User::PHONE_BASIC_VALIDATE_RULES, ['unique:users']),
-            'direccion' => array_merge(['required'], User::DIRECCION_BASIC_VALIDATE_RULES),
-			'verify_id' => array_merge(
-				VerifyPhone::VERIFY_ID_BASIC_VALIDATE_RULES, VerifyPhone::VERIFY_ID_EXITS_VALIDATE_RULES
-			),
-			'email' => array_merge(['required'], User::EMAIL_BASIC_VALIDATE_RULES),
-        ]);
+        return Validator::make(
+			$data
+		, [
+			'name' => array_merge(User::NAME_BASIC_VALIDATE_RULES),
+			'phone' => array_merge( User::PHONE_BASIC_VALIDATE_RULES),
+			'direccion' => array_merge(User::DIRECCION_BASIC_VALIDATE_RULES),
+			'email' => array_merge(User::EMAIL_BASIC_VALIDATE_RULES, ['unique:users']),
+			'pais' => User::PAIS_BASIC_VALIDATE_RULES
+		]);
 	}
 
 	/**
@@ -80,66 +80,13 @@ class RegisterController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function preregister2(Request $request)
-    {
-		$request_phone = strlen($request->phone)==9 ? '51' . $request->phone : $request->phone;
-        $this->prevalidator(
-			array_merge($request->all(), ['phone'=> $request_phone])
-		)->validate();
-		$result = [];
-		if ($request->filled('verify_id') && $phone = VerifyPhone::getVerifyPhone($request->verify_id)) {
-			#if ($phone = VerifyPhone::getVerifyPhone($request->verify_id)) {
-				if ($phone->phone == $request_phone && $phone->isAvailableCode()) {
-					$result['data'] = $phone;
-				} else {
-					$phone->phone = $request_phone;
-					$result['data'] = $phone->resend($request->ip());
-				}
-				$result['status'] =  $phone->getStatus();
-			#}
-		} else {
-				
-		#if ( !isset($result['status']) ) {
-			$count = VerifyPhone::where('phone', $request_phone)
-						->whereDate('created_at', '>', Date::now()->addDay(-1))
-						->count();
-
-			Validator::make([
-					VerifyPhone::KEYRULE_REGISTER_TRIES_PHONE_DAY => $count // data
-				], [
-				VerifyPhone::KEYRULE_REGISTER_TRIES_PHONE_DAY => array_merge(
-					['required'],
-					VerifyPhone::REGISTER_TRIES_PHONE_DAY_BASIC_VALIDATE_RULES, // rules
-					['max:' . (VerifyPhone::MAX_REGISTER_TRIES_PER_DAY_PER_PHONE - 1)],
-				),
-			])->validate();
-
-			$result['data'] = VerifyPhone::send($request_phone, $request->ip());
-			$result['status'] = $result['data']->getStatus();
-		}
-		//error_log(json_encode($result));
-		return response()->json($result, 200);
-    }
-
-	/**
-     * Handle a preregistration request for the application.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function preregister(Request $request) {
-		$result = [];
-		$request_phone = strlen($request->phone)==9 ? '51' . $request->phone : $request->phone;
-		$body = $request->all();
-		if ($request->phone) $body["phone"] = strlen($request->phone)==9 ? '51' . $request->phone : $request->phone;
-		Validator::make(
-			$body
-			, [
-				'name' => array_merge(User::NAME_BASIC_VALIDATE_RULES),
-				'phone' => array_merge( User::PHONE_BASIC_VALIDATE_RULES, ['unique:users']),
-				'direccion' => array_merge(User::DIRECCION_BASIC_VALIDATE_RULES),
-				'email' => array_merge(User::EMAIL_BASIC_VALIDATE_RULES, ['unique:users']),
+		$this->prevalidator($request->all())->validate();
+		Validator::make(["phone" => $request->pais . $request->phone], [
+			"phone" => ['unique:users']
 		])->validate();
+		$result = [];
+		//$request->validate(static::PrevalidateRules);
 		$result["status"] = Controller::STATUS_SUCCES;
 		#$result["data"] = $request->all();
 		return response()->json($result, 200);
@@ -154,16 +101,16 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
 		//error_log('REGISTRO LOG validator init');
-        return Validator::make($data, [
-            'name' => array_merge(['required'], User::NAME_BASIC_VALIDATE_RULES),
-            'direccion' => array_merge(['required'], User::DIRECCION_BASIC_VALIDATE_RULES),
-			'verify_id' => array_merge(
-				['required'],
-				VerifyPhone::VERIFY_ID_BASIC_VALIDATE_RULES, VerifyPhone::VERIFY_ID_EXITS_VALIDATE_RULES
-			),
-			'email' => array_merge(['required'], User::EMAIL_BASIC_VALIDATE_RULES),
-			'code' => array_merge(['required'], VerifyPhone::CODE_BASIC_VALIDATE_RULES),
-        ]);
+       return Validator::make(
+			$data
+		, [
+			#'name' => array_merge(User::NAME_BASIC_VALIDATE_RULES),
+			#'phone' => array_merge( User::PHONE_BASIC_VALIDATE_RULES, ['unique:users']),
+			'direccion' => array_merge(['required'], User::DIRECCION_BASIC_VALIDATE_RULES),
+			#'email' => array_merge(User::EMAIL_BASIC_VALIDATE_RULES, ['unique:users']),
+			#'pais' => User::PAIS_BASIC_VALIDATE_RULES,
+			'uid' => array_merge(['required'], User::UID_BASIC_VALIDATE_RULES)
+		]);
 	}
 	
 	/**
@@ -172,19 +119,20 @@ class RegisterController extends Controller
 	 * @param  array  $data
 	 * @return \App\User
 	 */
-	protected function create(array $data)
+	protected function create($data)
 	{
 		$token = Str::uuid();
 
 		$newUser = User::create([
-			'name' => $data['name'],
-			'phone' => $data['phone'],
+			'name' => $data['displayName'],
+			'phone' => $data['phoneNumber'],
 			'direccion' => $data['direccion'],
 			'email' => $data['email'],
-			//'api_token' => hash('sha256', $token),
+			'uid' => $data['uid'],
 		]);
 
-		$newUser->api_token = hash('sha256', $token);
+		#$newUser->api_token = hash('sha256', $token);
+		$newUser->api_token = $data['uid'];
 		
 		//error_log(json_encode($data));
 		
@@ -209,22 +157,19 @@ class RegisterController extends Controller
     {
         $this->validator($request->all())->validate();
 		$result = [];
-		if ($phone_number = VerifyPhone::getConfirmedPhoneNumber($request->verify_id, $request->code)) {
-			event(new Registered($user = $this->create(
-				array_merge($request->all(), ['phone'=>$phone_number])
-			)));
-			$this->guard()->login($user);
-			$result['status'] = 'REGISTERED';
-			$result['data'] = array_merge($user->toArray(), ['api_token'=>$user->api_token]);
-		} elseif (is_null($phone_number)) {
-			$result['status'] = VerifyPhone::STATUS_INVALID_CODE;
-			$result['messsage'] = "El código no es válido";
-			//$result['error'] = "INVALID_CODE";
-		} else {
-			$result['status'] = VerifyPhone::STATUS_EXPIRED_CODE;
-			$result['messsage'] = "El código ha expirado";
-			$result['tmp_phone'] = $phone_number;
-		}
+		$auth = app('firebase.auth');
+		$userFirebase = $auth->getUser($request->uid);
+		$data = array_merge($userFirebase->jsonSerialize(),
+			['direccion' => $request->direccion]
+		);
+		#return response()->json([$data["uid"]], 200);
+		event(new Registered($user = $this->create($data)));
+		$this->guard()->login($user);
+		$result['status'] = 'REGISTERED';
+		/*$result["uid"] = $result["data"]["uid"];
+		$result["email"] = $user->email;
+		$result["phone"] = $user->phoneNumber;
+		$result["name"] = $user->displayName;*/
 		return response()->json($result, 200);
 	}
 }

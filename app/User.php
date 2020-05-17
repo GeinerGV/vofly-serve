@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Validation\Rule;
 
 class User extends Authenticatable //implements MustVerifyEmail
 {
@@ -16,7 +17,7 @@ class User extends Authenticatable //implements MustVerifyEmail
      * @var array
      */
     protected $fillable = [
-        'name', "phone", "direccion", "email"
+        'name', "phone", "direccion", "email", "uid"
     ];
     
     //protected $guarded = ["api_token"];
@@ -27,7 +28,7 @@ class User extends Authenticatable //implements MustVerifyEmail
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token', "api_token"
+        'password', 'remember_token', "api_token", "uid"
     ];
 
     /**
@@ -62,9 +63,13 @@ class User extends Authenticatable //implements MustVerifyEmail
 
     public const EMAIL_BASIC_VALIDATE_RULES = ['email', 'max:255'];
 
-    public const PHONE_BASIC_VALIDATE_RULES = ['digits_between:9,11'];
+    public const PHONE_BASIC_VALIDATE_RULES = ['digits:9', 'starts_with:9'];
 
     public const NAME_BASIC_VALIDATE_RULES = ['string', 'max:255'];
 
-    public const 	DIRECCION_BASIC_VALIDATE_RULES = ['string', 'max:255'];
+    public const PAIS_BASIC_VALIDATE_RULES = ['digits:2', 'starts_with:51'];
+
+    public const UID_BASIC_VALIDATE_RULES = ['string', 'max:128'];
+
+    public const DIRECCION_BASIC_VALIDATE_RULES = ['string', 'max:255'];
 }
