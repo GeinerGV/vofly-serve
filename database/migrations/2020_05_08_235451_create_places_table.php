@@ -13,17 +13,15 @@ class CreatePlacesTable extends Migration
      */
     public function up()
     {
-        /*Schema::create('places', function (Blueprint $table) {
+        Schema::create('places', function (Blueprint $table) {
             $table->id();
-			$table->string('latitud');
-			$table->string('longitud');
-			$table->string('place_id', 255);
-			$table->string('nombre', 255);
-			$table->string('direccion', 255)->nullable();
-			$table->integer('ubicable_id')->unsigned();
-			$table->string('ubicable_type');
+			$table->string('latitud')->nullable();
+			$table->string('longitud')->nullable();
+			$table->string('identficador', 255)->nullable();
+			$table->string('nombre', 255)->nullable();
+			$table->string('direccion', 255);
             $table->timestamps();
-        });*/
+        });
     }
 
     /**
@@ -33,6 +31,6 @@ class CreatePlacesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('registered_places');
+        Schema::dropIfExists('places');
     }
 }

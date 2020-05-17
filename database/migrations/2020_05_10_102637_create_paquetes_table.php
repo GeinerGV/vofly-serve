@@ -18,8 +18,9 @@ class CreatePaquetesTable extends Migration
 			$table->smallInteger('alto')->unsigned()->nullable();
 			$table->smallInteger('ancho')->unsigned()->nullable();
 			$table->smallInteger('largo')->unsigned()->nullable();
-			$table->smallInteger('peso')->unsigned();
+			$table->smallInteger('peso')->unsigned()->nullable();
 			$table->tinyInteger('fragil')->unsigned();
+			$table->string('tipo', 50);
             $table->timestamps();
         });
     }

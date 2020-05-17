@@ -80,7 +80,7 @@ class RegisterController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function preregister(Request $request)
+    public function preregister2(Request $request)
     {
 		$request_phone = strlen($request->phone)==9 ? '51' . $request->phone : $request->phone;
         $this->prevalidator(
@@ -122,6 +122,30 @@ class RegisterController extends Controller
     }
 
 	/**
+     * Handle a preregistration request for the application.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function preregister(Request $request) {
+		$result = [];
+		$request_phone = strlen($request->phone)==9 ? '51' . $request->phone : $request->phone;
+		$body = $request->all();
+		if ($request->phone) $body["phone"] = strlen($request->phone)==9 ? '51' . $request->phone : $request->phone;
+		Validator::make(
+			$body
+			, [
+				'name' => array_merge(User::NAME_BASIC_VALIDATE_RULES),
+				'phone' => array_merge( User::PHONE_BASIC_VALIDATE_RULES, ['unique:users']),
+				'direccion' => array_merge(User::DIRECCION_BASIC_VALIDATE_RULES),
+				'email' => array_merge(User::EMAIL_BASIC_VALIDATE_RULES, ['unique:users']),
+		])->validate();
+		$result["status"] = Controller::STATUS_SUCCES;
+		#$result["data"] = $request->all();
+		return response()->json($result, 200);
+	}
+
+	/**
      * Get a validator for an incoming registration request.
      *
      * @param  array  $data
@@ -150,7 +174,7 @@ class RegisterController extends Controller
 	 */
 	protected function create(array $data)
 	{
-		$token = Str::random(60);
+		$token = Str::uuid();
 
 		$newUser = User::create([
 			'name' => $data['name'],

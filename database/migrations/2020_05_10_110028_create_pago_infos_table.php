@@ -15,7 +15,7 @@ class CreatePagoInfosTable extends Migration
     {
         Schema::create('pago_infos', function (Blueprint $table) {
             $table->integerIncrements('id');
-			$table->tinyInteger('plan_id')->unsigned();
+			$table->tinyInteger('delivery_plan_id')->unsigned();
             $table->timestamps();
         });
     }

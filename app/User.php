@@ -56,7 +56,11 @@ class User extends Authenticatable //implements MustVerifyEmail
         return static::AvatarDirStorage . $this->id;
     }
 
-    public const EMAIL_BASIC_VALIDATE_RULES = ['string', 'email', 'max:255'];
+	public function deliveries() {
+		return $this->hasMany('App\Delivery');
+	}
+
+    public const EMAIL_BASIC_VALIDATE_RULES = ['email', 'max:255'];
 
     public const PHONE_BASIC_VALIDATE_RULES = ['digits_between:9,11'];
 

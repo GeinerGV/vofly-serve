@@ -15,21 +15,22 @@ class CreateDeliveriesTable extends Migration
     {
         Schema::create('deliveries', function (Blueprint $table) {
             $table->integerIncrements('id');
+			$table->string('type');
 			#user(User): belongsTo
 			$table->integer('user_id')->unsigned(); // Delivery
 			#driver(Driver): belongsTo
 			$table->integer('driver_id')->unsigned()->nullable(); // Delivery
 			#recojo(Agente): belongsTo
-			$table->integer('recojo_id')->unsigned();
-			$table->integer('recojo_type')->unsigned();
+			$table->integer('recogible_id')->unsigned();
+			$table->string('recogible_type');
 			#entrega(Agente): belongsTo
-			$table->integer('entrega_id')->unsigned();
-			$table->integer('entrega_type')->unsigned();
+			$table->integer('entregable_id')->unsigned();
+			$table->string('entregable_type');
 			#carga(Paquete): belongsTo
-			$table->integer('paquete_id')->unsigned();
-			#$table->integer('paquete_type')->unsigned();
+			$table->integer('cargable_id');
+			$table->string('cargable_type');
 			#pago(PagoInfo):
-			$table->integer('pago_id')->unsigned();
+			$table->integer('plan_id')->unsigned();
 			#extradata
 			$table->string('distancia')->nullable();
 			$table->string('detalles_carga', 300)->nullable(); // Courier detail
