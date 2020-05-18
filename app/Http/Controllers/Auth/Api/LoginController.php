@@ -24,12 +24,20 @@ class LoginController extends Controller
 
 	public function prelogin(Request $request) {
 		$this->prevalidator($request->all())->validate();
-		Validator::make(["phone" => "+" . $request->pais . $request->phone], [
+		$phone = "+" . $request->pais . $request->phone;
+		Validator::make(["phone" => $phone], [
 			"phone" => ['exists:users']
 		])->validate();
+		$user = User::where("phone", $phone)->where('email', $request->email)->first();
         $result = [];
 		//$request->validate(static::PrevalidateRules);
-		$result["status"] = Controller::STATUS_SUCCES;
+		if ($user) $result["status"] = Controller::STATUS_SUCCES;
+		else {
+			$result["errors"] = [
+				"email" => ["Credeciales no registradas"],
+				"phone" => ["Credeciales no registradas"],
+			];
+		}
 		#$result["data"] = $request->all();
 		return response()->json($result, 200);
 	}
