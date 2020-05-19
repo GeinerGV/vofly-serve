@@ -53,7 +53,7 @@ class LoginController extends Controller
         $this->validator($request->all())->validate();
 		$result = [];
 		$user = User::where("uid", $request->uid)->first();
-		$result["data"] = $user->makeVisible(["api_token"])->makeHidden(["id"])->toArray();
+		$result["data"] = $user->makeVisible(["api_token", "uid"])->makeHidden(["id"])->toArray();
 		return response()->json($result, 200);
 
 		/* PROVIDER PHONE OBJECT DATA {
