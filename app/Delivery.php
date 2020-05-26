@@ -37,9 +37,20 @@ class Delivery extends Model
     public function plan() {
 		return $this->belongsTo('App\Models\Pago\DeliveryPlan');
 	}
+	
+	public function getEstado() {
+		if (!$this->estado) {
+			return "NO INICIADO";
+		}
+		return $this->estado;
+	}
+	
 
-    /*public function user() {
-		return $this->belongsTo('App\User');
-	}*/
+	public function distanciaFormatoStr() {
+		if ($this->distancia<1000) {
+			return ($this->distancia . " m");
+		} else {
+			return (round($this->distancia / 1000, 1) . " km");
+		}
+	}
 }
-

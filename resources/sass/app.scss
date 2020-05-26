@@ -4,9 +4,6 @@
 // Variables
 @import 'variables';
 
-// Bootstrap
-@import '~bootstrap/scss/bootstrap';
-
 body {
 	background: #76b852;
 	/* fallback for old browsers */
@@ -17,11 +14,34 @@ body {
 	background-size: cover;
 	background-attachment: fixed;
 	font-family: 'Roboto', sans-serif;
+	display: flex;
+	min-height: 100vh;
+}
+
+#app {
+	flex: 1;
+	display: grid;
+	grid-auto-rows: auto 1fr auto;
+	
+}
+
+main {
+	flex: 1;
+	display: flex;
 }
 
   .wrapper {
 	position: relative;
 	overflow: hidden;
+  }
+
+  .wrapper-bubbles {
+	position: absolute;
+	overflow: hidden;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
   }
   
   .colorlib-bubbles {

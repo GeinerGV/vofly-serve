@@ -25,7 +25,10 @@ Route::middleware('auth:api')->post('/user', function (Request $request) {
 });
 
 Route::group(['middleware' => 'auth:api'], function() {
-	Route::apiResource('delivery', 'API\DeliveryController');
+    Route::apiResource('delivery', 'API\DeliveryController');
+    Route::post('dashboard', 'API\DashboardController@lapsoTiempoData');
+    Route::post('paginator', 'API\DashboardController@pagination');
+    Route::get('paginator', 'API\DashboardController@pagination');
 });
 
 Route::group(['middleware' => 'fromapp'], function() {
@@ -34,5 +37,6 @@ Route::group(['middleware' => 'fromapp'], function() {
     Route::post('register', 'Auth\Api\RegisterController@appregister');
     Route::post('preregister', 'Auth\Api\RegisterController@preregister');
     Route::post('auth', 'Auth\Api\RegisterController@evaluateSignAuthCachedData');
-    Route::post('send', 'API\Local@sendTester');
+    Route::post('local/send', 'API\Local@sendTester');
+    Route::post('local/test', 'API\Local@tester');
 });

@@ -9,30 +9,43 @@
 		<!-- Fonts -->
 		<link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
 
-		<link href="{{ mix('css/app.css') }}" rel="stylesheet">
+		<link href="{{ asset('css/vendor.css') }}" rel="stylesheet">
+		<link href="{{ asset('css/app.css') }}" rel="stylesheet">
 	</head>
 	<body>
-		<div id="app"></div>
-		<div class="container-fluid wrapper h-100v">
-			{{-- @if (Route::has('login'))
-				<div class="top-right links">
-					@auth
-						<a href="{{ url('/home') }}">Home</a>
-					@else
-						<a href="{{ route('login') }}">Login</a>
-
-						@if (Route::has('register'))
-							<a href="{{ route('register') }}">Registro</a>
-						@endif
-					@endauth
+		<div id="app">
+			<nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm w-100">
+				<div class="container">
+					<a class="navbar-brand" href="{{ url('/') }}">
+						{{ config('app.name', 'Laravel') }}
+					</a>
+					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
+						<span class="navbar-toggler-icon"></span>
+					</button>
+	
+					<div class="collapse navbar-collapse" id="navbarSupportedContent">
+						<ul class="navbar-nav ml-auto">
+							@auth
+								<li class="nav-item">
+									<a class="nav-link" href="/dashboard">{{ __('Dashboard') }}</a>
+								</li>
+							@else
+								<li class="nav-item">
+									<a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+								</li>
+							@endauth
+						</ul>
+					</div>
 				</div>
-			@endif --}}
-
-			<div class="row">
-				<p class="display-1 text-center col-12 text-light font-weight-bold">
-					{{ config('app.name', 'Laravel') }}
-				</p>
+			</nav>
+			<div class="container-fluid wrapper">
+				<div class="row h-100" style="justify-content: center; align-items: center;">
+					<p class="display-1 text-center col-12 text-light font-weight-bold">
+						{{ config('app.name', 'Laravel') }}
+					</p>
+				</div>
 			</div>
+			<script src="{{ mix('js/app.js') }}" type="text/javascript"></script>
 			<ul class="colorlib-bubbles">
 				<li></li>
 				<li></li>
@@ -46,6 +59,5 @@
 				<li></li>
 			</ul>
 		</div>
-		<script src="{{ mix('js/app.js') }}" type="text/javascript"></script>
 	</body>
 </html>

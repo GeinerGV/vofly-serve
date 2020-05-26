@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,4 +20,11 @@ Route::get('/', function () {
 
 Auth::routes(['verify' => true]);
 
-Route::get('/home', 'HomeController@index')->middleware('verified');
+Route::get('/dashboard', 'HomeController@index')->middleware('verified');
+Route::get('/drivers', 'HomeController@index')->middleware('verified');
+Route::get('/usuarios', 'HomeController@index')->middleware('verified');
+Route::get('/pedidos', 'HomeController@index')->middleware('verified');
+
+Route::get('/home', function () {
+    return redirect("/dashboard");
+});
