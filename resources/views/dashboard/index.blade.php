@@ -34,7 +34,20 @@
 					</div>
 					<div class="media-body">
 						<div style="font-size: 0.6rem">NUEVOS HOY</div>
-						<h4 class="card-title">0+</h4>
+						@php
+							$day = Illuminate\Support\Facades\Date::now();
+							$usersToday = App\User::select([
+								DB::raw('DATE(created_at) AS date'),
+								DB::raw('COUNT(id) AS count'),
+								])
+							->whereDate ('created_at', $day)
+							->groupBy('date')
+							->orderBy('date', 'ASC')
+							->get()
+							->toArray();
+							$usersToday = count($usersToday)>0 ? $usersToday[0]["count"] : 0;
+						@endphp
+						<h4 class="card-title">{{$usersToday}}+</h4>
 						<div class="row">
 							<div class="col-6 flex-column">
 								<div style="font-size: 0.7rem">TOTAL</div>
@@ -71,7 +84,22 @@
 					</div>
 					<div class="media-body">
 						<div style="font-size: 0.6rem">NUEVOS HOY</div>
-						<h4 class="card-title">0+</h4>
+						
+						@php
+							$day = Illuminate\Support\Facades\Date::now();
+							$pedidosToday = App\Driver::select([
+								DB::raw('DATE(created_at) AS date'),
+								DB::raw('COUNT(*) AS count'),
+								])
+							->whereDate ('created_at', $day)
+							->groupBy('date')
+							->orderBy('date', 'ASC')
+							->get()
+							->toArray();
+							$pedidosToday = count($pedidosToday)>0 ? $pedidosToday[0]["count"] : 0;
+						@endphp
+						
+						<h4 class="card-title">{{$pedidosToday}}+</h4>
 						<div class="row">
 							<div class="col-6 flex-column">
 								<div style="font-size: 0.7rem">TOTAL</div>
@@ -108,7 +136,20 @@
 					</div>
 					<div class="media-body">
 						<div style="font-size: 0.6rem">NUEVOS HOY</div>
-						<h4 class="card-title">0+</h4>
+						@php
+							$day = Illuminate\Support\Facades\Date::now();
+							$pedidosToday = App\Delivery::select([
+								DB::raw('DATE(created_at) AS date'),
+								DB::raw('COUNT(*) AS count'),
+								])
+							->whereDate ('created_at', $day)
+							->groupBy('date')
+							->orderBy('date', 'ASC')
+							->get()
+							->toArray();
+							$pedidosToday = count($pedidosToday)>0 ? $pedidosToday[0]["count"] : 0;
+						@endphp
+						<h4 class="card-title">{{$pedidosToday}}+</h4>
 						<div class="row">
 							<div class="col-6 flex-column">
 								<div style="font-size: 0.7rem">TOTAL</div>
