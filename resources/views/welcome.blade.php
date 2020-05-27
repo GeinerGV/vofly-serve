@@ -14,7 +14,7 @@
 	</head>
 	<body>
 		<div id="app">
-			<nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm w-100">
+			{{-- <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm w-100">
 				<div class="container">
 					<a class="navbar-brand" href="{{ url('/') }}">
 						{{ config('app.name', 'Laravel') }}
@@ -37,11 +37,12 @@
 						</ul>
 					</div>
 				</div>
-			</nav>
+			</nav> --}}
 			<div class="container-fluid wrapper">
 				<div class="row h-100" style="justify-content: center; align-items: center;">
 					<p class="display-1 text-center col-12 text-light font-weight-bold">
-						{{ config('app.name', 'Laravel') }}
+						{{-- {{ config('app.name', 'Laravel') }} --}}
+						<img src="/logo.png" alt="VoFly">
 					</p>
 				</div>
 			</div>

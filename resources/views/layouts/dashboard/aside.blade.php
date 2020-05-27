@@ -3,7 +3,7 @@
         ["key"=>"dashboard", "txt"=>"Dashboard"],
         ["key"=>"usuarios", "txt"=>"Usuarios"], 
         ["key"=>"drivers", "txt"=>"Drivers"], 
-        ["key"=>"pedidos", "txt"=>"Pepidos"],
+        ["key"=>"pedidos", "txt"=>"Pedidos"],
     ];
     $active = request()->path()
 @endphp
