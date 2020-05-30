@@ -22,5 +22,7 @@ class Paquete extends Model
 			$this->ancho = $data["volumen"]["ancho"];
 			$this->largo = $data["volumen"]["largo"];
 		}
+		$this->precio = $data["precio"];
+		$this->nombre = $data["nombre"];
 	}
 }

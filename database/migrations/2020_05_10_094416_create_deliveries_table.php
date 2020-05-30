@@ -32,7 +32,7 @@ class CreateDeliveriesTable extends Migration
 			#pago(PagoInfo):
 			$table->integer('plan_id')->unsigned();
 			#extradata
-			$table->string('distancia')->nullable();
+			$table->integer('distancia')->unsigned()->nullable();
 			$table->string('detalles_carga', 300)->nullable(); // Courier detail
 			$table->string('estado', 25)->nullable();
             $table->timestamps();

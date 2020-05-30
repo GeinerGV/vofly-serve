@@ -21,6 +21,8 @@ class CreatePaquetesTable extends Migration
 			$table->smallInteger('peso')->unsigned()->nullable();
 			$table->tinyInteger('fragil')->unsigned();
 			$table->string('tipo', 50);
+			$table->string('nombre', 100);
+			$table->decimal('precio',8, 2, true);
             $table->timestamps();
         });
     }
