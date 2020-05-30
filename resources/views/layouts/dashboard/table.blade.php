@@ -26,7 +26,7 @@
 		</div>
 	</form>
 	<div class="table-cnt">
-		<table class="table table-hover">
+		<table class="table table-hover" id="currentTable">
 			<thead>
 				<tr>
 					@yield('dashboard-table-head')

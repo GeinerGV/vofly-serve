@@ -9,3 +9,5 @@ $("#len_rows").on("change", function() {
     console.log(url)
     location.href = url;
 });
+
+//$("#currentTable tbody td")
