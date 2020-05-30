@@ -16,11 +16,11 @@ class Paquete extends Model
 		$this->tipo = $data["tipo"];
 		if (isset($data["peso"]) && $data["peso"]>0) $this->peso = $data["peso"];
 		if (isset($data["volumen"],
-			$data["volumen"]["hei"], $data["volumen"]["wid"], $data["volumen"]["len"]
+			$data["volumen"]["alto"], $data["volumen"]["ancho"], $data["volumen"]["largo"]
 		)) {
-			$this->alto = $data["volumen"]["hei"];
-			$this->ancho = $data["volumen"]["wid"];
-			$this->largo = $data["volumen"]["len"];
+			$this->alto = $data["volumen"]["alto"];
+			$this->ancho = $data["volumen"]["ancho"];
+			$this->largo = $data["volumen"]["largo"];
 		}
 	}
 }
