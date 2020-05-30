@@ -140,4 +140,35 @@ class DeliveryController extends Controller
 		$result["precios"] = DeliveryPlan::all();
 		return response()->json($result);
 	}
+
+	public function lista(Request $request) {
+		/* $deliveries = $request->user()->deliveries;
+		$deliveries->load("recojo.place", "entrega.place", "plan", "carga");
+		return response()->json($deliveries); */
+
+		Validator::make($request->all(), [
+			'tipo' => ['required', "string"],
+			'last_id' => ["integer"],
+		])->validate();
+
+		$pag = 1;#isset($request->pag) && is_numeric($request->pag) ? $request->pag : 1;
+		$limit = 10;
+		$result = [];
+		//$data = Delivery::where("user_id", $request->user()->id);
+		$filter = function ($query) {
+			$query;
+		};
+		switch ($request->tipo) {
+			case "WAITING":
+				$filter = function ($query) {
+					$query->where("estado", "<>", "FINALIZADO")->orWhereNull("estado");
+				};
+			break;
+		}
+		$result["deliveries"] = Delivery::where("user_id", $request->user()->id)
+				->where($filter)->latest()->offset(($pag-1)*$limit)->limit($limit)->get();
+		$result["deliveries"]->load("recojo.place", "entrega.place", "plan", "carga");
+		return response()->json($result);
+
+	}
 }
