@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -79,13 +80,40 @@ class Profile extends Controller
 		])->validate();
 		$user = $request->user();
 		//$result["user"] = Auth::user();
-        $result['avatar'] = $request->file('avatar')->store('avatars');
-        Storage::setVisibility($result['avatar'], 'public');
+        $result['avatar'] = $request->file('avatar')->store('public/avatars');
+        //$result['avatar'] = Storage::url($result['avatar']);
+        //Storage::setVisibility($result['avatar'], 'public');
 		if ($result['avatar']) {
 			if ($user->avatar) Storage::delete($user->avatar);
 			$user->avatar = $result['avatar'];
 			$user->save();
 		}
 		return response()->json($result);
-	}
+    }
+
+    public function updateData (Request $request) {
+        Validator::make(
+			$request->all()
+		, [
+			'name' => array_merge(User::NAME_BASIC_VALIDATE_RULES),
+			#'phone' => array_merge( User::PHONE_BASIC_VALIDATE_RULES),
+			'direccion' => array_merge(User::DIRECCION_BASIC_VALIDATE_RULES),
+			#'email' => array_merge(User::EMAIL_BASIC_VALIDATE_RULES, ['unique:users']),
+			'pais' => User::PAIS_BASIC_VALIDATE_RULES
+        ])->validate();
+        
+        $result = [];
+        $user = $request->user();
+        if ($request->filled("name")) {
+            $user->name = $request->name;
+            $user->save();
+        }
+
+        $result["status"] = "success";
+
+        #$result["data"] = $request->all();
+        #$result["user"] = $user;
+
+        return response()->json($result);
+    }
 }
