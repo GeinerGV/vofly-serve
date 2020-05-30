@@ -4,6 +4,7 @@
         ["key"=>"usuarios", "txt"=>"Usuarios"], 
         ["key"=>"drivers", "txt"=>"Drivers"], 
         ["key"=>"pedidos", "txt"=>"Pedidos"],
+        ["key"=>"pagos", "txt"=>"Pagos"],
     ];
     $active = request()->path()
 @endphp

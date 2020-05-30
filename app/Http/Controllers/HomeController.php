@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Delivery;
 use App\User;
 use App\Driver;
+use App\Models\Pago\DeliveryPlan;
 use Illuminate\Support\Facades\View;
 
 class HomeController extends Controller
@@ -53,6 +54,9 @@ class HomeController extends Controller
                         break;
                     case 'drivers':
                         $data = Driver::class;
+                        break;
+                    case 'pagos':
+                        $data = DeliveryPlan::class;
                         break;
                 }
                 if (!$pagination) $pagination = $data::paginate($len, ['*'], 'pag', $pag);
