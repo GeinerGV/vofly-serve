@@ -82,7 +82,7 @@ class Profile extends Controller
 		//$result["user"] = Auth::user();
         $result['avatar'] = $request->file('avatar')->store('public');
         //$result['avatar'] = Storage::url($result['avatar']);
-        //Storage::setVisibility($result['avatar'], 'public');
+        Storage::setVisibility($result['avatar'], 'public');
 		if ($result['avatar']) {
 			if ($user->avatar) Storage::delete($user->avatar);
 			$user->avatar = $result['avatar'];
