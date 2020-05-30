@@ -17,20 +17,16 @@ class Agente extends Model
 	}
 
 	public function updateData($data, string $type) {
-		/*if (is_string($data)) {
-			$data = json_encode($data)
-		}*/
-		//$recojo = new static;
 		$this->fullname = $data["fullname"];
 		$this->landmark = $data["landmark"];
 		$this->phone = $data["phone"];
 		$this->destino_type = $type;
 		
-		if (isset($data["place"]["id"])) {
-			$lugar = Place::find($data["place"]["id"]);
+		if (isset($data["lugar"]["id"])) {
+			$lugar = Place::find($data["lugar"]["id"]);
 		} else {
 			$lugar = new Place;
-			$lugar->updateData($data["place"]);
+			$lugar->updateData($data["lugar"]);
 			$lugar->save();
 		}
 		$this->place()->associate($lugar);

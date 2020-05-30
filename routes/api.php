@@ -25,10 +25,13 @@ Route::middleware('auth:api')->post('/user', function (Request $request) {
 });
 
 Route::group(['middleware' => 'auth:api'], function() {
+	//Route::apiResource('profile', 'API\Profile');
+	Route::post('avatar', 'API\Profile@updateAvatar');
     Route::apiResource('delivery', 'API\DeliveryController');
     Route::post('dashboard', 'API\DashboardController@lapsoTiempoData');
     Route::post('paginator', 'API\DashboardController@pagination');
     Route::get('paginator', 'API\DashboardController@pagination');
+	Route::get('precios', 'API\DeliveryController@precios');
 });
 
 Route::group(['middleware' => 'fromapp'], function() {

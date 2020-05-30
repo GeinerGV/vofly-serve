@@ -25,6 +25,7 @@ class Local extends Controller
         $password = Hash::make($request->password);
         $result = [];
         $result['data'] = $password;
+        $result["phone"] = app('firebase.auth')->getUser($request->uid)->uid;
         return response()->json($result, 200);
     }
 }

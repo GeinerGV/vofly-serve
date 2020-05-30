@@ -18,7 +18,7 @@ class CreateAgentesTable extends Migration
 			$table->string('destino_type');
 			# data
 			$table->integer('place_id')->unsigned();
-			$table->string('landmark', 255);
+			$table->string('landmark', 255)->nullable();
 			$table->string('fullname');
 			$table->string('phone', 13);
             $table->timestamps();

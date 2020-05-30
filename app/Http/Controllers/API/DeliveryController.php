@@ -44,15 +44,15 @@ class DeliveryController extends Controller
     public function store(Request $request)
     {
 		Validator::make($request->all(), [
-			'recojo' => ['required'],
-			'entrega' => ['required'],
-			'carga' => ['required'],
-			'pago' => ['required'],
+			'recojo' => ['required', "array"],
+			'entrega' => ['required', "array"],
+			'carga' => ['required', "array"],
+			'pago' => ['required', "array"],
 			'detalles_carga' => ['string'],
-			'distancia' => ['required'],
-			'type' => ['required'],
+			'distancia' => ["integer"],
+			'type' => ['required', "in:DELIVERY_PAQUETE"],
 		])->validate();
-
+		$result = [];
 		$delivery = new Delivery;
 		if ($request->distancia) $delivery->distancia = $request->distancia;
 		if ($request->detallesCarga) $delivery->detalles_carga = $request->detallesCarga;
@@ -96,8 +96,9 @@ class DeliveryController extends Controller
 		#$delivery->entrega()->save($recojo);
 
 		$delivery->push();
-
-		return response()->json(["data"=>$delivery]);
+		//$result["delivery"] = $delivery;
+		$result["status"] = "success";
+		return response()->json($result);
     }
 
     /**
@@ -133,4 +134,10 @@ class DeliveryController extends Controller
     {
         //
     }
+
+	public function precios(Request $request) {
+		$result = [];
+		$result["precios"] = DeliveryPlan::all();
+		return response()->json($result);
+	}
 }

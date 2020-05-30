@@ -14,7 +14,7 @@ class Paquete extends Model
 		//$recojo = new static;
 		$this->fragil = $data["fragil"];
 		$this->tipo = $data["tipo"];
-		if (isset($data["peso"])) $this->peso = $data["peso"];
+		if (isset($data["peso"]) && $data["peso"]>0) $this->peso = $data["peso"];
 		if (isset($data["volumen"],
 			$data["volumen"]["hei"], $data["volumen"]["wid"], $data["volumen"]["len"]
 		)) {

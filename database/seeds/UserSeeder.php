@@ -32,5 +32,26 @@ class UserSeeder extends Seeder
 			$admin->user()->associate($user);
 			$admin->push();
 		}
+		$auth = app('firebase.auth');
+		$users = $auth->listUsers($defaultMaxResults = 1000, $defaultBatchSize = 1000);
+
+		foreach ($users as $userFire) {
+			/** @var \Kreait\Firebase\Auth\UserRecord $user */
+			$user = User::where("uid", $userFire->uid)->first();
+			if (!$user) {
+				try {
+					User::create([
+						'name' => $userFire->displayName,
+						'phone' => $userFire->phoneNumber,
+						//'direccion' => $userFire->direccion,
+						'email' => $userFire->email,
+						'uid' => $userFire->uid,
+						"api_token" => $userFire->uid,
+					]);
+				} catch (\Throwable $th) {
+					
+				}
+			}
+		}
 	}
 }

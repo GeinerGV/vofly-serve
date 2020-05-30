@@ -4,6 +4,11 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
 
 class Profile extends Controller
 {
@@ -61,4 +66,25 @@ class Profile extends Controller
     {
         //
     }
+
+	/**
+     * Update the photo
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+	public function updateAvatar(Request $request) {
+		Validator::make($request->all(), [
+			'avatar' => ['required', 'image'],
+		])->validate();
+		$user = $request->user();
+		//$result["user"] = Auth::user();
+		$result['avatar'] = $request->file('avatar')->store('avatars');
+		if ($result['avatar']) {
+			if ($user->avatar) Storage::delete($user->avatar);
+			$user->avatar = $result['avatar'];
+			$user->save();
+		}
+		return response()->json($result);
+	}
 }

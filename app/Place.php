@@ -12,5 +12,10 @@ class Place extends Model
 
 	public function updateData($data) {
 		$this->direccion = $data["direccion"];
+		$this->latitud = $data["region"]["latitude"];
+		$this->longitud = $data["region"]["longitude"];
+		$this->latitudDelta = $data["region"]["latitudeDelta"];
+		$this->longitudDelta = $data["region"]["longitudeDelta"];
+		$this->identificador = $data["identificador"];
 	}
 }
