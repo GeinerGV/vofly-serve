@@ -80,7 +80,8 @@ class Profile extends Controller
 		])->validate();
 		$user = $request->user();
 		//$result["user"] = Auth::user();
-        $result['avatar'] = $request->file('avatar')->store('public');
+        $result['avatar'] = $request->file('avatar')->store('avatares');
+        //$result['avatar'] = Storage::putFile('avatares', $request->file('avatar'));
         //$result['avatar'] = Storage::url($result['avatar']);
         Storage::setVisibility($result['avatar'], 'public');
 		if ($result['avatar']) {
