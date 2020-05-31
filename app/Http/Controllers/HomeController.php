@@ -32,6 +32,7 @@ class HomeController extends Controller
     {
         $pagination = null;
         $view = "home";
+        $result = [];
         switch (request()->path()) {
             case 'dashboard':
                 break;
@@ -57,13 +58,30 @@ class HomeController extends Controller
                         break;
                     case 'pagos':
                         $data = DeliveryPlan::class;
+                        if ($request->isMethod('post')) {
+                            $validator = Validator::make($request->all(), [
+                                "precio" => ["required"],
+                                "nombre" => ["required"],
+                                "descripcion" => ["required"],
+                                "id" => ["required", "exists:delivery_plans"]
+                            ]);
+                            if (!$validator->fails()) {
+                                $plan = DeliveryPlan::find($request->id);
+                                $plan->nombre = $request->nombre;
+                                $plan->precio = $request->precio;
+                                $plan->descripcion = $request->descripcion;
+                                $plan->save();
+                                $result["alert"] = ["success", "Actualización exitosa"];
+                            } else {
+                                $result["alert"] = ["danger", "Error con los datos"];
+                            }
+                        }
                         break;
                 }
                 if (!$pagination) $pagination = $data::paginate($len, ['*'], 'pag', $pag);
                 if ($len!=15) $pagination->appends(['len' => $len]);
                 break;
         }
-        $result = [];
         $result["pagination"] = $pagination;
         if (View::exists('dashboard.'.request()->path())) $view = 'dashboard.'.request()->path();
         if (!request()->wantsJson()) {

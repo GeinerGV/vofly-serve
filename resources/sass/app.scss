@@ -18,6 +18,11 @@ body {
 	min-height: 100vh;
 }
 
+.alert.global {
+	position: absolute;
+	top: 20px,
+}
+
 #app {
 	flex: 1;
 	display: grid;
