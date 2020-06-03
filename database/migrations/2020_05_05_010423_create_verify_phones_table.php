@@ -13,7 +13,8 @@ class CreateVerifyPhonesTable extends Migration
      */
     public function up()
     {
-        Schema::create('verify_phones', function (Blueprint $table) {
+		Schema::dropIfExists('verify_phones');
+        /* Schema::create('verify_phones', function (Blueprint $table) {
             $table->mediumIncrements("id");
             $table->string("phone", 13);
             $table->string("code", 6);
@@ -21,7 +22,7 @@ class CreateVerifyPhonesTable extends Migration
             $table->tinyInteger("reintentos", false, true)->default(0);
 			$table->string("ip", 45);
             $table->timestamps();
-        });
+        }); */
     }
 
     /**

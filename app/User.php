@@ -40,9 +40,9 @@ class User extends Authenticatable //implements MustVerifyEmail
 		'email_verified_at' => 'datetime',
 	];
 
-	public function savedPlaces() {
+	/* public function savedPlaces() {
 		return $this->morphMany('App\Place', 'ubicable');
-	}
+	} */
 
 
 
@@ -59,6 +59,10 @@ class User extends Authenticatable //implements MustVerifyEmail
 
 	public function deliveries() {
 		return $this->hasMany('App\Delivery');
+	}
+
+	public function places() {
+		return $this->belongsToMany('App\Place');
 	}
 	
 	public function admin() {

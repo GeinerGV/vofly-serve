@@ -1,6 +1,6 @@
 @extends('layouts.dashboard.table')
 @php
-	$heads = ["#", "Nombre", "Descripción", "Precio"];
+	$heads = ["#", "Nombre", "Descripción", "Precio", "Límite"];
 	$row = 0;
 @endphp
 
@@ -29,6 +29,7 @@
 			<td>{{$item->nombre}}</td>
 			<td>{{$item->descripcion}}</td>
 			<td>{{$item->precio}}</td>
+			<td>{{$item->limite}}</td>
 		</tr>
 	@endforeach
 @endsection
@@ -46,6 +47,10 @@
 		<label for="precio">Precio</label>
 		<input type="number" class="form-control" id="precio" name="precio"placeholder="Precio">
 	</div>
+	<div class="form-group">
+		<label for="precio">Límite</label>
+		<input type="number" class="form-control" id="limite" name="limite"placeholder="Sín límites">
+	</div>
 @endsection
 
 @section('dashboard-table-pagination')
@@ -60,6 +65,7 @@
 			$("#nombre").val(lastRowData.nombre);
 			$("#descripcion").val(lastRowData.descripcion);
 			$("#precio").val(lastRowData.precio);
+			$("#limite").val(lastRowData.limite);
 			$("#rowid").val(lastRowData.id);
 		}
 		var lastRowData = {};
@@ -73,6 +79,12 @@
 					return;
 				} else {
 					$("#precio").removeClass("is-invalid")
+				}
+				if (($("#limite").val()+"").length && (!parseFloat($("#limite").val()) || parseFloat($("#limite").val())<0)) {
+					$("#limite").addClass("is-invalid")
+					return;
+				} else {
+					$("#limite").removeClass("is-invalid")
 				}
 				$("#form-data").submit();
 			})

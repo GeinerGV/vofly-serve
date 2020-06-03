@@ -23,6 +23,7 @@ class PlanDeliverySeeder extends Seeder
 		]);
 		if (!DeliveryPlan::where("nombre", "Delux")->first()) DB::table('delivery_plans')->insert([
 			'precio' => 12.5,
+			'limite' => 2000,
 			'nombre' => "Delux",
 			'descripcion' => '2 a 3 días',
 			"created_at" => Date::now(),
@@ -30,6 +31,7 @@ class PlanDeliverySeeder extends Seeder
 		]);
 		if (!DeliveryPlan::where("nombre", "Premium")->first()) DB::table('delivery_plans')->insert([
 			'precio' => 20,
+			'limite' => 2000,
 			'nombre' => "Premium",
 			'descripcion' => '2 a 3 días',
 			"created_at" => Date::now(),

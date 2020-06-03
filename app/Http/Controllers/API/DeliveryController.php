@@ -109,7 +109,15 @@ class DeliveryController extends Controller
      */
     public function show(Delivery $delivery)
     {
-        //
+		$result = [];
+		//$result["delivery"] = $delivery;
+		$user = Auth::user();
+		if ($delivery->user_id===$user->id) {
+			$result["delivery"] = $delivery;
+			$delivery->load("recojo.place", "entrega.place", "plan", "carga", "driver");
+		}
+		//$result["data"] = $delivery->user_id;
+        return response()->json($result);
     }
 
     /**
@@ -147,27 +155,39 @@ class DeliveryController extends Controller
 		return response()->json($deliveries); */
 
 		Validator::make($request->all(), [
-			'tipo' => ['required', "string"],
+			'status' => ['required', "string"],
 			'last_id' => ["integer"],
+			'limit' => ["integer"],
 		])->validate();
 
-		$pag = 1;#isset($request->pag) && is_numeric($request->pag) ? $request->pag : 1;
-		$limit = 10;
+		//$last_id = isset($request->last_id) ? $request->pag : null;
+		$limit = isset($request->limit) ? $request->limit :4;
 		$result = [];
 		//$data = Delivery::where("user_id", $request->user()->id);
-		$filter = function ($query) {
-			$query;
-		};
-		switch ($request->tipo) {
+		$filter = null;
+		switch ($request->status) {
 			case "WAITING":
 				$filter = function ($query) {
-					$query->where("estado", "<>", "FINALIZADO")->orWhereNull("estado");
+					$query->where("estado", "<>", "Enviado")->orWhereNull("estado");
+				};
+			break;
+			case "FINISHED":
+				$filter = function ($query) {
+					$query->where("estado", "=", "Enviado");//->orWhereNull("estado");
 				};
 			break;
 		}
-		$result["deliveries"] = Delivery::where("user_id", $request->user()->id)
-				->where($filter)->latest()->offset(($pag-1)*$limit)->limit($limit)->get();
-		$result["deliveries"]->load("recojo.place", "entrega.place", "plan", "carga");
+		$result["deliveries"] = $filter ? Delivery::where(function ($query) {
+				global $request;
+				if ($request->filled("last_id")) {
+					$query->where("id", '<', $request->last_id);
+				} else {
+					$query;
+				}
+			})->where("user_id", $request->user()->id)->where($filter)->orderBy('id', 'desc')
+			->limit($limit)->get() : 
+			[];
+		if ($filter) $result["deliveries"]->load("recojo.place", "entrega.place", "plan", "carga");
 		return response()->json($result);
 
 	}

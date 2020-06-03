@@ -69,6 +69,7 @@ class HomeController extends Controller
                                 $plan = DeliveryPlan::find($request->id);
                                 $plan->nombre = $request->nombre;
                                 $plan->precio = $request->precio;
+                                $plan->limite = $request->limite;
                                 $plan->descripcion = $request->descripcion;
                                 $plan->save();
                                 $result["alert"] = ["success", "Actualización exitosa"];

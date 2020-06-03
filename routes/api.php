@@ -33,7 +33,9 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::post('paginator', 'API\DashboardController@pagination');
     Route::get('paginator', 'API\DashboardController@pagination');
 	Route::get('precios', 'API\DeliveryController@precios');
-	Route::get('deliveries', 'API\DeliveryController@lista');
+    Route::get('deliveries', 'API\DeliveryController@lista');
+    
+	Route::get('terminos', 'API\InfoController@terminos');
 });
 
 Route::group(['middleware' => 'fromapp'], function() {
