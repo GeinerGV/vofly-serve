@@ -29,6 +29,7 @@ Route::group(['middleware' => 'auth:api'], function() {
 	Route::post('avatar', 'API\Profile@updateAvatar');
 	Route::post('perfil', 'API\Profile@updateData');
     Route::apiResource('delivery', 'API\DeliveryController');
+    Route::apiResource('mensajes', 'API\MensajeController');
     Route::post('dashboard', 'API\DashboardController@lapsoTiempoData');
     Route::post('paginator', 'API\DashboardController@pagination');
     Route::get('paginator', 'API\DashboardController@pagination');

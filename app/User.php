@@ -73,6 +73,10 @@ class User extends Authenticatable //implements MustVerifyEmail
 		return $this->hasOne('App\Driver');
 	}
 
+	public function mensajes() {
+		return $this->hasMany("App\Models\Contacto\Mensaje");
+	}
+
 	public const EMAIL_BASIC_VALIDATE_RULES = ['email', 'max:255'];
 
 	public const PHONE_BASIC_VALIDATE_RULES = ['digits:9', 'starts_with:9'];
