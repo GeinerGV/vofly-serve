@@ -62,7 +62,12 @@ class User extends Authenticatable //implements MustVerifyEmail
 	}
 
 	public function places() {
-		return $this->belongsToMany('App\Place');
+		return $this->belongsToMany('App\Place')->using('App\PlaceUser')
+			->withPivot([
+                'fullname',
+                'landmark',
+                'phone',
+            ]);
 	}
 	
 	public function admin() {

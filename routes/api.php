@@ -28,6 +28,9 @@ Route::group(['middleware' => 'auth:api'], function() {
 	//Route::apiResource('profile', 'API\Profile');
 	Route::post('avatar', 'API\Profile@updateAvatar');
 	Route::post('perfil', 'API\Profile@updateData');
+	Route::post('savedplace', 'API\Profile@userPlace');
+	Route::get('savedplaces', 'API\Profile@places');
+
     Route::apiResource('delivery', 'API\DeliveryController');
     Route::apiResource('mensajes', 'API\MensajeController');
     Route::post('dashboard', 'API\DashboardController@lapsoTiempoData');

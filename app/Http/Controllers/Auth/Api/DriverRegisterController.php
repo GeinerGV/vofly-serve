@@ -2,57 +2,21 @@
 
 namespace App\Http\Controllers\Auth\Api;
 
+use App\Driver;
 use App\Http\Controllers\Auth\RegisterController as Controller;
-use Illuminate\Support\Facades\Storage;
 use \Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use App\Providers\RouteServiceProvider;
 use App\User;
-use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Str;
 //use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 //use Twilio\Rest\Client;
 use App\VerifyPhone;
-use Illuminate\Support\Facades\Date;
 use Illuminate\Auth\Events\Registered;
 
 //require_once '../../../../../vendor/autoload.php';
 
-class RegisterController extends Controller
+class DriverRegisterController extends Controller
 {
-
-	/**
-	 * Evaluar si está registrado o preregistrado o ninguno.
-	 * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-	 */
-	public function evaluateSignAuthCachedData(Request $request) {
-
-		# Validator
-		Validator::make($request->all(), [
-			'verify_id' => array_merge(
-				['required'],
-				VerifyPhone::VERIFY_ID_BASIC_VALIDATE_RULES, VerifyPhone::VERIFY_ID_EXITS_VALIDATE_RULES
-			),
-			'phone' => array_merge(['required'], User::PHONE_BASIC_VALIDATE_RULES),
-			'email' => array_merge(['required'], User::EMAIL_BASIC_VALIDATE_RULES),
-		])->validate();
-
-		#
-		$result = [];
-		$verify= VerifyPhone::getVerifyPhone($request->verify_id);
-		#
-		if ($request->phone==$verify->phone) {
-			$result['data'] = [];
-			$user = User::where('phone', $request->phone)->where('email', $request->email)->first();
-			$result['data']['preregistered'] = !$user;
-			$result['data']['verify_data'] = $verify;
-		} else {
-			$result['message'] = 'Diferentes números';
-		}
-		return response()->json($result, 200);
-	}
 
     /**
      * Get a validator for an incoming preregistration request.
@@ -70,7 +34,8 @@ class RegisterController extends Controller
 			'phone' => array_merge( User::PHONE_BASIC_VALIDATE_RULES),
 			'direccion' => array_merge(User::DIRECCION_BASIC_VALIDATE_RULES),
 			'email' => array_merge(User::EMAIL_BASIC_VALIDATE_RULES, ['unique:users']),
-			'pais' => User::PAIS_BASIC_VALIDATE_RULES
+			'pais' => User::PAIS_BASIC_VALIDATE_RULES,
+			'dni' => array_merge(Driver::DNI_BASIC_VALIDATE_RULES, ['unique:drivers']),
 		]);
 	}
 
@@ -109,7 +74,8 @@ class RegisterController extends Controller
 			'direccion' => array_merge(['required'], User::DIRECCION_BASIC_VALIDATE_RULES),
 			#'email' => array_merge(User::EMAIL_BASIC_VALIDATE_RULES, ['unique:users']),
 			#'pais' => User::PAIS_BASIC_VALIDATE_RULES,
-			'uid' => array_merge(['required'], User::UID_BASIC_VALIDATE_RULES)
+			'uid' => array_merge(['required'], User::UID_BASIC_VALIDATE_RULES),
+			'dni' => array_merge(['required'], Driver::DNI_BASIC_VALIDATE_RULES)
 		]);
 	}
 	

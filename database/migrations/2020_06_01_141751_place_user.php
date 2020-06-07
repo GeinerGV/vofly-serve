@@ -13,11 +13,14 @@ class PlaceUser extends Migration
      */
     public function up()
     {
+		Schema::dropIfExists('place_user');
         Schema::create('place_user', function (Blueprint $table) {
             $table->id();
             $table->integer("place_id")->unsigned();
             $table->unsignedBigInteger("user_id")->unsigned();
-            $table->string("nombre");
+            $table->string('landmark', 255)->nullable();
+            $table->string('fullname')->nullable();
+            $table->string('phone', 13)->nullable();
             $table->timestamps();
         });
     }
@@ -29,6 +32,6 @@ class PlaceUser extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('place_user');
     }
 }

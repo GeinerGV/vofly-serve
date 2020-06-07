@@ -4,12 +4,14 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\User;
+use App\Place;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 
 class Profile extends Controller
 {
@@ -117,4 +119,80 @@ class Profile extends Controller
 
         return response()->json($result);
     }
+
+	public function places(Request $request) {
+		$result = [];
+		$user = $request->user();
+		$places = $user->places()->whereIn("nombre", ["Casa", "Trabajo", "Otro"])->get();
+
+		$result["places"] = $places;
+
+		return response()->json($result);
+	}
+
+	public function userPlace(Request $request) {
+		Validator::make($request->all(), [
+			"lugar" => ["array"],
+			"lugar.nombre" => [Rule::requiredIf($request->filled('lugar')), "string"],
+			"lugar.direccion" => [Rule::requiredIf($request->filled('lugar')), "string"],
+			"lugar.identificador" => [Rule::requiredIf($request->filled('lugar')), "string"],
+			"lugar.region.latitude" => [Rule::requiredIf($request->filled('lugar')), "numeric"],
+			"lugar.region.latitudeDelta" => [Rule::requiredIf($request->filled('lugar')), "numeric"],
+			"lugar.region.longitude" => [Rule::requiredIf($request->filled('lugar')), "numeric"],
+			"lugar.region.longitudeDelta" => [Rule::requiredIf($request->filled('lugar')), "numeric"],
+			'nombreLugar' => [Rule::requiredIf(!$request->filled('lugar')), 'string'],
+			'landmark' => ['string'],
+			'fullname' => ['string'],
+			'phone' => ['digits_between:0,9'],
+		])->validate();
+	
+		$user = $request->user();
+
+		/*if (!(isset($data["lugar"]["id"]) && $lugar = Place::find($data["lugar"]["id"]))) {
+			$lugar = new Place;
+		}*/
+		$result = [];
+		#$result['user'] = $user;
+		//$user->places()->detach();
+		$columnas = [];
+		$place = null;
+		if (isset($request->lugar)) {
+			if (isset($request->lugar["id"])) {
+				$place = $user->places()->where("place_id", $request["lugar"]["id"])->first();
+				if (!$place) {
+					$place = Place::find($request->lugar["id"]);
+					if ($place) $user->places()->attach($place->id);
+				}
+			} else {
+				$lastPlace = $user->places()->where("nombre", $request->lugar["nombre"])->first();
+				if ($lastPlace) $user->places()->detach($lastPlace->id);
+			}
+
+			if ($place) {
+				//$user->places()->where("place_id", $data["lugar"]["id"])->first();
+				//$place = Place::find($request->lugar["id"]);
+				$place->updateData($request->lugar);
+				$place->save();
+				$atributos["landmark"] = isset($request->landmark) ? $request->landmark : null ;
+				$atributos["fullname"] = isset($request->fullname) ? $request->fullname : null ;
+				$atributos["phone"] = isset($request->phone) ? $request->phone : null ;
+				$user->places()->updateExistingPivot($place, $atributos);
+			} else {
+				$place = new Place;
+				$place->updateData($request->lugar);
+				if (isset($request->landmark)) $columnas["landmark"] = $request->landmark;
+				if (isset($request->fullname)) $columnas["fullname"] = $request->fullname;
+				if (isset($request->phone)) $columnas["phone"] = $request->phone;
+				$user->places()->save($place, $columnas);
+			}
+			$place = $user->places()->where("nombre", $request->lugar["nombre"])->first();
+		} else {
+			$place = $user->places()->where("nombre", $request->nombreLugar)->first();
+			if ($place) $user->places()->detach($place->id);
+			$place = $user->places()->where("nombre", $request->nombreLugar)->first();
+		}
+		if (true) $result["savedPlaceModel"] = $place;
+		$result["status"] = "success";
+		return response()->json($result);
+	}
 }

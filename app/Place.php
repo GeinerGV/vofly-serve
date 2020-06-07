@@ -17,5 +17,6 @@ class Place extends Model
 		$this->latitudDelta = $data["region"]["latitudeDelta"];
 		$this->longitudDelta = $data["region"]["longitudeDelta"];
 		$this->identificador = $data["identificador"];
+		if (isset($data["nombre"])) $this->nombre = $data["nombre"];
 	}
 }
