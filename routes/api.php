@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:api')->post('/user', function (Request $request) {
     return response()->json([
-        "user"=>$request->user(),
+        "user"=>$request->user()->load("driver"),
         //"api_token"=> Str::random(60),
         #"current"=>Route::current(),
         #"currentRouteName"=>Route::currentRouteName(),
@@ -38,6 +38,15 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::get('paginator', 'API\DashboardController@pagination');
 	Route::get('precios', 'API\DeliveryController@precios');
     Route::get('deliveries', 'API\DeliveryController@lista');
+
+    Route::group(['middleware' => 'auth.driver'], function() {
+        Route::get('historial', 'API\DeliveryController@historial');
+        Route::get('pedidos', 'API\DeliveryController@pedidos');
+        Route::get('currpedido', 'API\DeliveryController@currentPedido');
+        Route::post('pedido/start', 'API\DeliveryController@iniciarPedido');
+        Route::post('usertodriver', 'API\Profile@userToDriverForm');
+        Route::post('savelocation', 'API\Profile@saveLocation');
+    });
     
 	Route::get('terminos', 'API\InfoController@terminos');
 });
@@ -47,6 +56,12 @@ Route::group(['middleware' => 'fromapp'], function() {
     Route::post('prelogin', 'Auth\Api\LoginController@prelogin');
     Route::post('register', 'Auth\Api\RegisterController@appregister');
     Route::post('preregister', 'Auth\Api\RegisterController@preregister');
+
+    Route::post('logindriver', 'Auth\Api\DriverLoginController@applogin');
+    Route::post('prelogindriver', 'Auth\Api\DriverLoginController@prelogin');
+    Route::post('registerdriver', 'Auth\Api\DriverRegisterController@appregister');
+    Route::post('preregisterdriver', 'Auth\Api\DriverRegisterController@preregister');
+
     Route::post('auth', 'Auth\Api\RegisterController@evaluateSignAuthCachedData');
     Route::post('local/send', 'API\Local@sendTester');
     Route::post('local/test', 'API\Local@tester');

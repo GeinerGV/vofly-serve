@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Driver;
 use App\Http\Controllers\Controller;
 use App\User;
 use App\Place;
@@ -12,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
+use Kreait\Firebase\Database;
 
 class Profile extends Controller
 {
@@ -193,6 +195,44 @@ class Profile extends Controller
 		}
 		if (true) $result["savedPlaceModel"] = $place;
 		$result["status"] = "success";
+		return response()->json($result);
+	}
+
+	public function userToDriverForm(Request $request) {
+		Validator::make($request->all(), [
+			'dni' => array_merge(['required'], Driver::DNI_BASIC_VALIDATE_RULES, ['unique:drivers'])
+		])->validate();
+		$result = [];
+		if (!$request->user()->driver) {
+			Driver::create([
+				'dni' => $request->dni,
+				'id' => $request->user()->id
+			]);
+		}
+		/**
+		 * @var Database
+		 */
+		$db = app('firebase.database');
+		$userRef = $db->getReference('users/'.$request->user()->uid);
+		$userRef->update(["driver"=>true, "driverActive"=>true]);
+		$result["status"] = 'success';
+		return response()->json($result);
+	}
+
+	public function driver(Request $request) {
+		$user = $request->user();
+		$user->load("driver");
+	}
+
+	public function saveLocation(Request $request) {
+		Validator::make($request->all(), [
+			"location"=>["required"]
+		])->validate();
+		$driver = $request->user()->driver;
+		$driver->location = $request->location;
+		$driver->save();
+		$result = [];
+		$result["driver"] = $driver;
 		return response()->json($result);
 	}
 }

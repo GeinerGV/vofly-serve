@@ -16,10 +16,7 @@
         "laravel/framework": "^7.0",
         "laravel/nexmo-notification-channel": "^2.3",
         "laravel/tinker": "^2.0",
-        "laravel/ui": "^2.0",
-        "nexmo/client": "^2.0",
-        "nexmo/laravel": "^2.2",
-        "twilio/sdk": "^6.4"
+        "laravel/ui": "^2.0"
     },
     "require-dev": {
         "facade/ignition": "^2.0",

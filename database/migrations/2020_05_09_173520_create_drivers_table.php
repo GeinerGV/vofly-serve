@@ -13,13 +13,15 @@ class CreateDriversTable extends Migration
      */
     public function up()
     {
+        Schema::dropIfExists('drivers');
         Schema::create('drivers', function (Blueprint $table) {
-            $table->integer('user_id')->unsigned();
+            $table->integer('id')->unsigned();
 			$table->string('dni', 8);
+			$table->boolean('activo')->nullable();
             $table->timestamps();
 			#Constraints
-			$table->primary('user_id');
-			$table->foreign('user_id')->references('id')->on('users');
+			$table->primary('id');
+			$table->foreign('id')->references('id')->on('users');
         });
     }
 

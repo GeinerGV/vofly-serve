@@ -75,7 +75,7 @@ class DriverRegisterController extends Controller
 			#'email' => array_merge(User::EMAIL_BASIC_VALIDATE_RULES, ['unique:users']),
 			#'pais' => User::PAIS_BASIC_VALIDATE_RULES,
 			'uid' => array_merge(['required'], User::UID_BASIC_VALIDATE_RULES),
-			'dni' => array_merge(['required'], Driver::DNI_BASIC_VALIDATE_RULES)
+			'dni' => array_merge(['required'], Driver::DNI_BASIC_VALIDATE_RULES, ['unique:drivers'])
 		]);
 	}
 	
@@ -87,7 +87,7 @@ class DriverRegisterController extends Controller
 	 */
 	protected function create($data)
 	{
-		$token = Str::uuid();
+		#$token = Str::uuid();
 
 		$newUser = User::create([
 			'name' => $data['displayName'],
@@ -109,7 +109,11 @@ class DriverRegisterController extends Controller
 		} */
 
 		$newUser->save();
-		
+
+		$driver = new Driver;
+		$driver->dni = $data['dni'];
+		$driver->user()->associate($newUser);
+		$driver->push();
 		return $newUser;
 	}
 
@@ -126,7 +130,10 @@ class DriverRegisterController extends Controller
 		$auth = app('firebase.auth');
 		$userFirebase = $auth->getUser($request->uid);
 		$data = array_merge($userFirebase->jsonSerialize(),
-			['direccion' => $request->direccion]
+			[
+				'direccion' => $request->direccion, 
+				'dni' => $request->dni,
+			],
 		);
 		#return response()->json([$data["uid"]], 200);
 		event(new Registered($user = $this->create($data)));

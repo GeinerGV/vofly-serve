@@ -36,7 +36,7 @@ class Local extends Controller
 		$err = curl_error($curl);
 		if (!$err) {
 			$response = json_decode($response);
-			$result['data'] = ;
+		//	$result['data'] = ;
 		} else {
 			$result['status'] = "error";
 		}

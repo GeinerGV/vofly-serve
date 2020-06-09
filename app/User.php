@@ -75,7 +75,7 @@ class User extends Authenticatable //implements MustVerifyEmail
 	}
 	
 	public function driver() {
-		return $this->hasOne('App\Driver');
+		return $this->hasOne('App\Driver', "id");
 	}
 
 	public function mensajes() {
