@@ -38,13 +38,13 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::get('paginator', 'API\DashboardController@pagination');
 	Route::get('precios', 'API\DeliveryController@precios');
     Route::get('deliveries', 'API\DeliveryController@lista');
+    Route::post('usertodriver', 'API\Profile@userToDriverForm');
 
     Route::group(['middleware' => 'auth.driver'], function() {
         Route::get('historial', 'API\DeliveryController@historial');
         Route::get('pedidos', 'API\DeliveryController@pedidos');
         Route::get('currpedido', 'API\DeliveryController@currentPedido');
         Route::post('pedido/start', 'API\DeliveryController@iniciarPedido');
-        Route::post('usertodriver', 'API\Profile@userToDriverForm');
         Route::post('savelocation', 'API\Profile@saveLocation');
     });
     
