@@ -28,7 +28,7 @@ class User extends Authenticatable //implements MustVerifyEmail
 	 * @var array
 	 */
 	protected $hidden = [
-		'password', 'remember_token', "api_token", "uid"
+		'password', 'remember_token', "api_token"
 	];
 
 	/**

@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Casts\Json;
 use Illuminate\Database\Eloquent\Model;
 
 class Driver extends Model
@@ -14,6 +15,15 @@ class Driver extends Model
 	 */
 	protected $fillable = [
 		'dni', 'id'
+	];
+
+	/**
+	 * The attributes that should be cast to native types.
+	 *
+	 * @var array
+	 */
+	protected $casts = [
+		'location' => Json::class,
 	];
 	
 	public function user() {

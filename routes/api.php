@@ -44,8 +44,22 @@ Route::group(['middleware' => 'auth:api'], function() {
         Route::get('historial', 'API\DeliveryController@historial');
         Route::get('pedidos', 'API\DeliveryController@pedidos');
         Route::get('currpedido', 'API\DeliveryController@currentPedido');
-        Route::post('pedido/start', 'API\DeliveryController@iniciarPedido');
-        Route::post('savelocation', 'API\Profile@saveLocation');
+        Route::post('isactive', 'API\DriverController@isActive');
+        Route::get('isactive', 'API\DriverController@isActive');
+		Route::prefix('app')->group(function () {
+			Route::get('opensign', 'API\AppController@driverOpenSign');
+		});
+    });
+
+    Route::group(['middleware' => 'auth.driver', 'prefix'=>'driver'], function() {
+        Route::post('pedido/start', 'API\DriverController@iniciarPedido');
+        Route::post('pedido/recogido', 'API\DriverController@pedidoRecogido');
+        Route::post('pedido/entregado', 'API\DriverController@pedidoEntregado');
+		Route::prefix('app')->group(function () {
+			Route::get('opensign', 'API\AppController@driverOpenSign');
+		});
+        Route::post('location', 'API\DriverController@location');
+        Route::get('location', 'API\DriverController@location');
     });
     
 	Route::get('terminos', 'API\InfoController@terminos');

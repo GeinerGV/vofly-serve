@@ -108,6 +108,8 @@ class DeliveryController extends Controller
 		$db = app('firebase.database');
 		$newDeliveryRef = $db->getReference('deliveries')->push();
 		$newDeliveryRef->set(array_merge($request->all(), ['id'=>$delivery->id]));
+		$delivery->firebasekey = $newDeliveryRef->getKey();
+		$delivery->save();
 
 		$result["status"] = "success";
 		return response()->json($result);
@@ -274,25 +276,6 @@ class DeliveryController extends Controller
 	public function currentPedido(Request $request) {
 		$result = [];
 		$result["delivery"] = $request->user()->driver->currentPedido();
-		return response()->json($result);
-	}
-
-	public function iniciarPedido(Request $request) {
-		$validacion = Validator::make($request->all(), [
-			"id" => ["required", "integer"]
-		]);
-		$result = [];
-		if(!$validacion->fails()) {
-			$current = $request->user()->driver->currentPedido();
-			if (!$current) {
-				$delivery = Delivery::find($request->id);//Delivery::where("id", $request->id)->whereNull("driver_id")->first();
-				if ($delivery && !$delivery->driver_id) {
-					$delivery->driver()->associate($request->user()->driver);
-					$delivery->save();
-					if ($delivery->driver_id) $result["status"] = "success";
-				}
-			}
-		}
 		return response()->json($result);
 	}
 }

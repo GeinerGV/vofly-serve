@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Casts\Json;
 use Illuminate\Database\Eloquent\Model;
 
 class Delivery extends Model
@@ -11,6 +12,21 @@ class Delivery extends Model
 	public function getRecojoAttribute() {
 		return $this->recojo_model;
 	}*/
+
+	/**
+	 * The attributes that should be cast to native types.
+	 *
+	 * @var array
+	 */
+	protected $casts = [
+		'location' => Json::class,
+		'trayectoria' => Json::class,
+	];
+
+	public const STATUS_INICIADO = "Iniciado";
+
+	public const STATUS_ENTREGADO = "Enviado";
+	public const STATUS_RECOGIDO = "Recogido";
 
     public function user() {
 		return $this->belongsTo('App\User');

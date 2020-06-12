@@ -214,25 +214,8 @@ class Profile extends Controller
 		 */
 		$db = app('firebase.database');
 		$userRef = $db->getReference('users/'.$request->user()->uid);
-		$userRef->update(["driver"=>true, "driverActive"=>true]);
+		$userRef->update(["driver"=>true, "driverActive"=>false]);
 		$result["status"] = 'success';
-		return response()->json($result);
-	}
-
-	public function driver(Request $request) {
-		$user = $request->user();
-		$user->load("driver");
-	}
-
-	public function saveLocation(Request $request) {
-		Validator::make($request->all(), [
-			"location"=>["required"]
-		])->validate();
-		$driver = $request->user()->driver;
-		$driver->location = $request->location;
-		$driver->save();
-		$result = [];
-		$result["driver"] = $driver;
 		return response()->json($result);
 	}
 }
