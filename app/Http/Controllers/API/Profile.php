@@ -218,4 +218,31 @@ class Profile extends Controller
 		$result["status"] = 'success';
 		return response()->json($result);
 	}
+
+	public function user(Request $request) {
+		/* Validator::make($request->all(), [
+			'expoToken' => ['string'],
+			'driverExpoToken' => ['string']
+		]); */
+		if ($request->filled("expoToken")) {
+			/**
+			 * @var Database
+			 */
+			$db = app('firebase.database');
+			$userRef = $db->getReference('users/'.$request->user()->uid);
+			$userRef->update(["expoToken"=>$request->expoToken]);
+		}
+		if ($request->filled("driverExpoToken")) {
+			/**
+			 * @var Database
+			 */
+			$db = app('firebase.database');
+			$userRef = $db->getReference('users/'.$request->user()->uid);
+			$userRef->update(["driverExpoToken"=>$request->driverExpoToken]);
+		}
+
+		return response()->json([
+			"user"=>$request->user()->load("driver"),
+		]);
+	}
 }

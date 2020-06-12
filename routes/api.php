@@ -14,15 +14,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->post('/user', function (Request $request) {
-    return response()->json([
-        "user"=>$request->user()->load("driver"),
-        //"api_token"=> Str::random(60),
-        #"current"=>Route::current(),
-        #"currentRouteName"=>Route::currentRouteName(),
-        #"currentRouteAction"=>Route::currentRouteAction(),
-    ]);
-});
+Route::middleware('auth:api')->post('/user', "API\Profile@user");
 
 Route::group(['middleware' => 'auth:api'], function() {
 	//Route::apiResource('profile', 'API\Profile');
