@@ -22,6 +22,7 @@ Auth::routes(['verify' => true]);
 
 Route::get('/dashboard', 'HomeController@index')->middleware('verified');
 Route::get('/drivers', 'HomeController@index')->middleware('verified');
+Route::post('/drivers', 'HomeController@index')->middleware('verified');
 Route::get('/usuarios', 'HomeController@index')->middleware('verified');
 Route::get('/pedidos', 'HomeController@index')->middleware('verified');
 Route::get('/pagos', 'HomeController@index')->middleware('verified');

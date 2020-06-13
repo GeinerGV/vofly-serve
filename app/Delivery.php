@@ -65,6 +65,7 @@ class Delivery extends Model
 	
 
 	public function distanciaFormatoStr() {
+		if (!$this->distancia) return "";
 		if ($this->distancia<1000) {
 			return ($this->distancia . " m");
 		} else {

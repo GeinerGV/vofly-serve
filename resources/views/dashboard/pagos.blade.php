@@ -66,13 +66,9 @@
 			$("#descripcion").val(lastRowData.descripcion);
 			$("#precio").val(lastRowData.precio);
 			$("#limite").val(lastRowData.limite);
-			$("#rowid").val(lastRowData.id);
 		}
 		var lastRowData = {};
 		$(function() {
-			$("#modal-data-table").on("show.bs.modal", function (e) {
-				selectNewRow($(e.relatedTarget).parents("tr").index());
-			})
 			$("#guardar-cambios").on("click", function (e) {
 				if (!parseFloat($("#precio").val()) || parseFloat($("#precio").val())<0) {
 					$("#precio").addClass("is-invalid")

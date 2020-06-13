@@ -17,9 +17,10 @@
 		{{-- .card.text-white.bg-info>.card-header{Usuarios}+.card-body --}}
 		<div class="card text-white bg-info">
 			<button type="button" class="select_data_type btn btn-light" data-value="Usuarios">
-				<svg class="bi bi-eye-fill" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-					<path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/>
-					<path fill-rule="evenodd" d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/>
+				<svg class="bi bi-graph-up" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+					<path d="M0 0h1v16H0V0zm1 15h15v1H1v-1z"/>
+					<path fill-rule="evenodd" d="M14.39 4.312L10.041 9.75 7 6.707l-3.646 3.647-.708-.708L7 5.293 9.959 8.25l3.65-4.563.781.624z"/>
+					<path fill-rule="evenodd" d="M10 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-1 0V4h-3.5a.5.5 0 0 1-.5-.5z"/>
 				</svg>
 			</button>
 			<div class="card-body">
@@ -67,9 +68,10 @@
 		{{-- .card.text-white.bg-info>.card-header{Usuarios}+.card-body --}}
 		<div class="card text-white bg-danger">
 			<button type="button" class="select_data_type btn btn-light" data-value="Drivers">
-				<svg class="bi bi-eye-fill" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-					<path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/>
-					<path fill-rule="evenodd" d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/>
+				<svg class="bi bi-graph-up" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+					<path d="M0 0h1v16H0V0zm1 15h15v1H1v-1z"/>
+					<path fill-rule="evenodd" d="M14.39 4.312L10.041 9.75 7 6.707l-3.646 3.647-.708-.708L7 5.293 9.959 8.25l3.65-4.563.781.624z"/>
+					<path fill-rule="evenodd" d="M10 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-1 0V4h-3.5a.5.5 0 0 1-.5-.5z"/>
 				</svg>
 			</button>
 			<div class="card-body">
@@ -107,7 +109,7 @@
 							</div>
 							<div class="col-6 flex-column">
 								<div style="font-size: 0.7rem">ACTIVOS</div>
-								<div class="">{{App\Driver::all()->count()}}</div>
+								<div class="">{{App\Driver::where("activo", true)->whereNotNull('verified_at')->count()}}</div>
 							</div>
 						</div>
 					</div>
@@ -118,9 +120,10 @@
 	<div class="col-md-4">
 		<div class="card text-white bg-primary">
 			<button type="button" class="select_data_type btn btn-light" data-value="Pedidos">
-				<svg class="bi bi-eye-fill" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-					<path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/>
-					<path fill-rule="evenodd" d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/>
+				<svg class="bi bi-graph-up" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+					<path d="M0 0h1v16H0V0zm1 15h15v1H1v-1z"/>
+					<path fill-rule="evenodd" d="M14.39 4.312L10.041 9.75 7 6.707l-3.646 3.647-.708-.708L7 5.293 9.959 8.25l3.65-4.563.781.624z"/>
+					<path fill-rule="evenodd" d="M10 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-1 0V4h-3.5a.5.5 0 0 1-.5-.5z"/>
 				</svg>
 			</button>
 			<div class="card-body">
@@ -157,7 +160,8 @@
 							</div>
 							<div class="col-6 flex-column">
 								<div style="font-size: 0.7rem">PENDIENTES</div>
-								<div class="">{{App\Delivery::all()->count()}}</div>
+								<div class="">{{App\Delivery::whereNull("estado")->orWhere("estado", '<>', "Enviado")
+									->count()}}</div>
 							</div>
 						</div>
 					</div>

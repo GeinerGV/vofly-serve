@@ -9,6 +9,7 @@ use App\Delivery;
 use App\User;
 use App\Driver;
 use App\Models\Pago\DeliveryPlan;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\View;
 
 class HomeController extends Controller
@@ -33,6 +34,7 @@ class HomeController extends Controller
         $pagination = null;
         $view = "home";
         $result = [];
+        $len = null;
         switch (request()->path()) {
             case 'dashboard':
                 break;
@@ -55,6 +57,25 @@ class HomeController extends Controller
                         break;
                     case 'drivers':
                         $data = Driver::class;
+                        if ($request->isMethod('post')) {
+                            $validator = Validator::make($request->all(), [
+                                "dni" => ["required", "digits:8"],
+                                "id" => ["required", "exists:drivers"]
+                            ]);
+                            if (!$validator->fails()) {
+                                $ele = $data::find($request->id);
+                                $ele->dni = $request->dni;
+                                if ($ele->verified_at && !$request->habilitado) {
+                                    $ele->verified_at = null;
+                                } else if (!$ele->verified_at && $request->habilitado) {
+                                    $ele->verified_at = Date::now();
+                                }
+                                $ele->save();
+                                $result["alert"] = ["success", "Actualización exitosa"];
+                            } else {
+                                $result["alert"] = ["danger", "Error con los datos", $validator->errors()];
+                            }
+                        }
                         break;
                     case 'pagos':
                         $data = DeliveryPlan::class;
@@ -66,7 +87,7 @@ class HomeController extends Controller
                                 "id" => ["required", "exists:delivery_plans"]
                             ]);
                             if (!$validator->fails()) {
-                                $plan = DeliveryPlan::find($request->id);
+                                $plan = $data::find($request->id);
                                 $plan->nombre = $request->nombre;
                                 $plan->precio = $request->precio;
                                 $plan->limite = $request->limite;
@@ -79,11 +100,12 @@ class HomeController extends Controller
                         }
                         break;
                 }
-                if (!$pagination) $pagination = $data::paginate($len, ['*'], 'pag', $pag);
+                if (!$pagination) $pagination = $data::latest()->paginate($len, ['*'], 'pag', $pag);
                 if ($len!=15) $pagination->appends(['len' => $len]);
                 break;
         }
         $result["pagination"] = $pagination;
+        if ($len) $result["maxlen"] = $len;
         if (View::exists('dashboard.'.request()->path())) $view = 'dashboard.'.request()->path();
         if (!request()->wantsJson()) {
             return view($view, $result);

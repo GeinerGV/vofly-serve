@@ -1,7 +1,7 @@
 @extends('home')
 
 @section('dash-content')
-<div class="table-blq h-100">
+<div class="table-blq h-100" style="max-width: calc(100vw - 17px)">
 	@yield('alert')
 	<form class="w-100">
 		<div class="form-row">

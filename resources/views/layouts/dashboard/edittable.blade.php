@@ -15,5 +15,12 @@
         $("#form-data").on("submit", function(e) {
             //e.preventDefault();
         })
+        
+        $("#modal-data-table").on("show.bs.modal", function (e) {
+            const id = $(e.relatedTarget).parents("tr").index();
+		    window.lastRowData = getTableData()[id];
+			$("#rowid").val(window.lastRowData.id);
+            window.selectNewRow(id);
+        })
     })
 </script>
