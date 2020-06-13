@@ -17,9 +17,13 @@ class ApiAuthDriver
     public function handle($request, Closure $next)
     {
 
-        if ($request->user() && $request->user()->driver) {
+        if ($request->user() && $request->user()->driver && $request->user()->driver->verified_at) {
             return $next($request);
         }
-        return new Response('', 403);
+        if (!$request->user()->driver->verified_at) return response()->json(["status"=>"not_available"]);
+        if ($request->expectsJson()) {
+            return response()->json(["message"=>"Unauthenticated."], 401);
+        }
+        return new Response('', 401);
     }
 }

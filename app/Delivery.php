@@ -28,6 +28,8 @@ class Delivery extends Model
 	public const STATUS_ENTREGADO = "Enviado";
 	public const STATUS_RECOGIDO = "Recogido";
 
+	public const DELAY_UPDATE_LOCATION = 15000;
+
     public function user() {
 		return $this->belongsTo('App\User');
 	}

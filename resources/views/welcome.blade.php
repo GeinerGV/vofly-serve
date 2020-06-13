@@ -40,9 +40,9 @@
 			</nav> --}}
 			<div class="container-fluid wrapper">
 				<div class="row h-100" style="justify-content: center; align-items: center;">
-					<p class="display-1 text-center col-12 text-light font-weight-bold">
+					<p class="display-1 text-center col-12 text-light font-weight-bold d-flex justify-content-center">
 						{{-- {{ config('app.name', 'Laravel') }} --}}
-						<img src="/logo.png" alt="VoFly">
+						<img src="/logo.png" class="d-block" alt="VoFly" width="95%" style="max-width: 865px">
 					</p>
 				</div>
 			</div>

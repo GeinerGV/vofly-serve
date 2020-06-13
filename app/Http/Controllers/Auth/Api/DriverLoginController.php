@@ -32,8 +32,8 @@ class DriverLoginController extends Controller
 		if ($user) $result["status"] = Controller::STATUS_SUCCES;
 		else {
 			$result["errors"] = [
-				"email" => ["Credeciales no registradas"],
-				"phone" => ["Credeciales no registradas"],
+				"email" => ["Credeciales inválidas."],
+				"phone" => ["Credeciales inválidas."],
 			];
 		}
 		#$result["data"] = $request->all();

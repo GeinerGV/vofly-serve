@@ -127,8 +127,11 @@ class DeliveryController extends Controller
 		//$result["delivery"] = $delivery;
 		$user = Auth::user();
 		if ($delivery->user_id===$user->id) {
-			$result["delivery"] = $delivery;
 			$delivery->load("recojo.place", "entrega.place", "plan", "carga", "driver.user");
+			$result["delivery"] = $delivery->toArray();
+			if (request()->filled("woLocation")) {
+				$result["delivery"]['location'] = null;
+			}
 		} else if ($user->driver && (!$delivery->driver_id || $delivery->driver_id==$user->driver->id)) {
 			$result["delivery"] = $delivery;
 			$delivery->load("recojo.place", "entrega.place", "plan", "carga", "user");

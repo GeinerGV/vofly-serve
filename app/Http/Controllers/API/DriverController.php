@@ -25,12 +25,18 @@ class DriverController extends Controller
 			$driver->location = $request->location;
 			$driver->save();
 			if ($pedido=$driver->currentPedido()) {
-				$past = $pedido->location ? $pedido->location : [];
-				$pedido->location = array_merge($past, [[
-					"latitude"=>$request->location->coords->latitude,
-					"longitude"=>$request->location->coords->longitude,
-				]]);
-				$pedido->save();
+				if (!$pedido->last_location_time || 
+					(($pedido->last_location_time+Delivery::DELAY_UPDATE_LOCATION) <=
+						$request->location["timestamp"]) )
+				{
+					$pedido->last_location_time = $request->location["timestamp"];
+					$past = $pedido->location ? $pedido->location : [];
+					$pedido->location = array_merge($past, [[
+						"latitude"=>$request->location["coords"]["latitude"],
+						"longitude"=>$request->location["coords"]["longitude"],
+					]]);
+					$pedido->save();
+				}
 			}
 		}
 		$result = [];
