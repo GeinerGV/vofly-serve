@@ -18,6 +18,7 @@ Route::middleware('auth:api')->post('/user', "API\Profile@user");
 
 Route::group(['middleware' => 'auth:api'], function() {
 	//Route::apiResource('profile', 'API\Profile');
+	Route::post('token', 'API\Profile@token');
 	Route::post('avatar', 'API\Profile@updateAvatar');
 	Route::post('perfil', 'API\Profile@updateData');
 	Route::post('savedplace', 'API\Profile@userPlace');

@@ -224,6 +224,16 @@ class Profile extends Controller
 			'expoToken' => ['string'],
 			'driverExpoToken' => ['string']
 		]); */
+		return response()->json([
+			"user"=>$request->user()->load("driver"),
+		]);
+	}
+
+	public function token(Request $request) {
+		Validator::make($request->all(), [
+			'expoToken' => ['string'],
+			'driverExpoToken' => ['string']
+		])->validate();
 		if ($request->filled("expoToken")) {
 			/**
 			 * @var Database
@@ -242,7 +252,7 @@ class Profile extends Controller
 		}
 
 		return response()->json([
-			"user"=>$request->user()->load("driver"),
+			"status"=>"success",
 		]);
 	}
 }
