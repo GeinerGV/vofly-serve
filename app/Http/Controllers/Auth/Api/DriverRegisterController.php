@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Validator;
 //use Twilio\Rest\Client;
 use App\VerifyPhone;
 use Illuminate\Auth\Events\Registered;
+use Kreait\Firebase\Database;
 
 //require_once '../../../../../vendor/autoload.php';
 
@@ -114,6 +115,14 @@ class DriverRegisterController extends Controller
 		$driver->dni = $data['dni'];
 		$driver->user()->associate($newUser);
 		$driver->push();
+
+		/**
+		 * @var Database
+		 */
+		$db = app('firebase.database');
+		$userRef = $db->getReference('users/'.$data['uid'].'/driver');
+		$userRef->set(true);
+		
 		return $newUser;
 	}
 
