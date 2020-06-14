@@ -11,6 +11,7 @@ use App\Driver;
 use App\Models\Pago\DeliveryPlan;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\View;
+use Kreait\Firebase\Database;
 
 class HomeController extends Controller
 {
@@ -58,23 +59,7 @@ class HomeController extends Controller
                     case 'drivers':
                         $data = Driver::class;
                         if ($request->isMethod('post')) {
-                            $validator = Validator::make($request->all(), [
-                                "dni" => ["required", "digits:8"],
-                                "id" => ["required", "exists:drivers"]
-                            ]);
-                            if (!$validator->fails()) {
-                                $ele = $data::find($request->id);
-                                $ele->dni = $request->dni;
-                                if ($ele->verified_at && !$request->habilitado) {
-                                    $ele->verified_at = null;
-                                } else if (!$ele->verified_at && $request->habilitado) {
-                                    $ele->verified_at = Date::now();
-                                }
-                                $ele->save();
-                                $result["alert"] = ["success", "Actualización exitosa"];
-                            } else {
-                                $result["alert"] = ["danger", "Error con los datos", $validator->errors()];
-                            }
+                            $result["alert"] = $this->driversPost($request);
                         }
                         break;
                     case 'pagos':
@@ -116,4 +101,45 @@ class HomeController extends Controller
             : response()->json([]);
         ; */
     }
+
+    public function driversPost(Request $request) {
+        $validator = Validator::make($request->all(), [
+            "dni" => ["required", "digits:8"],
+            "id" => ["required", "exists:drivers"]
+        ]);
+        if (!$validator->fails()) {
+            $ele = Driver::find($request->id);
+            $ele->dni = $request->dni;
+            if ($ele->verified_at && !$request->habilitado) {
+                $ele->verified_at = null;
+                $ele->activo = false;
+                /**
+                 * @var Database
+                 */
+                $db = app('firebase.database');
+                $userRef = $db->getReference('users/'.$ele->user->uid);
+                $userRef->update([
+                    'driverHabilitado'=>false,
+                    'driverActive'=>false,
+                ]);
+            } else if (!$ele->verified_at && $request->habilitado) {
+                $ele->verified_at = Date::now();
+                $ele->activo = false;
+                /**
+                 * @var Database
+                 */
+                $db = app('firebase.database');
+                $userRef = $db->getReference('users/'.$ele->user->uid);
+                $userRef->update([
+                    'driverHabilitado'=>true,
+                    'driverHabilitado'=>false,
+                ]);
+            }
+            $ele->save();
+            return ["success", "Actualización exitosa"];
+        } else {
+            return ["danger", "Error con los datos", $validator->errors()];
+        }
+    }
+
 }

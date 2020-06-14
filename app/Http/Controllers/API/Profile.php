@@ -230,29 +230,34 @@ class Profile extends Controller
 	}
 
 	public function token(Request $request) {
-		Validator::make($request->all(), [
+		/* Validator::make($request->all(), [
 			'expoToken' => ['string'],
 			'driverExpoToken' => ['string']
-		])->validate();
-		if ($request->filled("expoToken")) {
+		])->validate(); */
+		$result = [];
+		if ($request->has("expoToken")) {
 			/**
 			 * @var Database
 			 */
 			$db = app('firebase.database');
-			$userRef = $db->getReference('users/'.$request->user()->uid);
-			$userRef->update(["expoToken"=>$request->expoToken]);
+			$userRef = $db->getReference('users/'.$request->user()->uid.'/expoToken');
+			$userRef->set($request->expoToken);
+			$result["expoToken"] = true;
 		}
-		if ($request->filled("driverExpoToken")) {
+		if ($request->has("driverExpoToken")) {
 			/**
 			 * @var Database
 			 */
 			$db = app('firebase.database');
-			$userRef = $db->getReference('users/'.$request->user()->uid);
-			$userRef->update(["driverExpoToken"=>$request->driverExpoToken]);
+			$userRef = $db->getReference('users/'.$request->user()->uid.'/driverExpoToken');
+			$userRef->set($request->driverExpoToken);
+			if (!$request->driverExpoToken) {
+				$db->getReference('users/'.$request->user()->uid.'/driverActive')->set(false);
+			}
+			$result["driverExpoToken"] = true;
 		}
 
-		return response()->json([
-			"status"=>"success",
-		]);
+		$result["status"] = "success";
+		return response()->json($result);
 	}
 }
