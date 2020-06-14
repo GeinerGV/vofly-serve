@@ -132,7 +132,7 @@ class HomeController extends Controller
                 $userRef = $db->getReference('users/'.$ele->user->uid);
                 $userRef->update([
                     'driverHabilitado'=>true,
-                    'driverHabilitado'=>false,
+                    'driverActive'=>false,
                 ]);
             }
             $ele->save();
