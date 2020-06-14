@@ -18,6 +18,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/politicas', function () {
+    return view('politicas');
+});
+
 Auth::routes(['verify' => true]);
 
 Route::get('/dashboard', 'HomeController@index')->middleware('verified');
