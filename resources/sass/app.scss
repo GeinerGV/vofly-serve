@@ -244,3 +244,67 @@ main {
 		transform: translate(-30px, -100vh) rotate($grado);
 	  }
   }
+
+  .ocean { 
+	height: 5%;
+	width:100%;
+	position:fixed;
+	bottom:0;
+	left:0;
+  }
+  $height: 60px;
+  .wave {
+	background: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/85486/wave.svg) repeat-x; 
+	position: absolute;
+	height: $height;
+	top: -$height+40px;
+	width: 6400px;
+	animation: wave 7s cubic-bezier( 0.36, 0.45, 0.63, 0.53) infinite;
+	transform: translate3d(0, 0, 0);
+	opacity: .7;
+  }
+  
+  .wave:nth-of-type(2) {
+	top: -$height+20px;
+	left: 200px;
+	animation: wave 7s cubic-bezier( 0.296, 0.55, 0.53, 0.73) -.125s infinite, swell 6s ease -1.25s infinite;
+  }
+  
+  @keyframes wave {
+	0% {
+	  margin-left: 0;
+	}
+	100% {
+	  margin-left: -1600px;
+	}
+  }
+  
+  @keyframes swell {
+	0%, 100% {
+	  transform: translate3d(0,15px,0);
+	}
+	50% {
+	  transform: translate3d(0,25px,0);
+	}
+  }
+
+.apk-card-cnt {
+	position: absolute;
+	bottom: 0;
+	width: 100vw;
+	background-color: whitesmoke;
+	left: 0;
+	display: flex;
+	flex-flow: column nowrap;
+	align-items: center;
+	max-height: 100vh;
+}
+
+.apk-blq {
+	display: none;
+	flex-flow: column nowrap;
+	align-items: center;
+	&.view {
+		display: flex;
+	}
+}

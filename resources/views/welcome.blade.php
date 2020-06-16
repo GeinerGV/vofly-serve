@@ -12,7 +12,7 @@
 		<link href="{{ asset('css/vendor.css') }}" rel="stylesheet">
 		<link href="{{ asset('css/app.css') }}" rel="stylesheet">
 	</head>
-	<body>
+	<body style="overflow-x: hidden;">
 		<div id="app">
 			{{-- <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm w-100">
 				<div class="container">
@@ -40,10 +40,10 @@
 			</nav> --}}
 			<div class="container-fluid wrapper">
 				<div class="row h-100" style="justify-content: center; align-items: center;">
-					<p class="display-1 text-center col-12 text-light font-weight-bold d-flex justify-content-center">
+					<div class="col-12 d-flex justify-content-center" style="user-select: none;">
 						{{-- {{ config('app.name', 'Laravel') }} --}}
 						<img src="/logo.png" class="d-block" alt="VoFly" width="95%" style="max-width: 865px">
-					</p>
+					</div>
 				</div>
 			</div>
 			<script src="{{ mix('js/app.js') }}" type="text/javascript"></script>
@@ -59,6 +59,50 @@
 				<li></li>
 				<li></li>
 			</ul>
+			<div class="ocean">
+				<div class="wave"></div>
+				<div class="wave"></div>
+			</div>
+			<div class="apk-card-cnt">
+				<a class="h5 btn text-align-center py-2 toggle-card">Descarga nuestra app</a>
+				<div class="apk-blq col-12">
+					<div class="row justify-content-around mb-3">
+						<div class="d-flex app col-md-5 justify-content-center">
+							<div class="card" style="width: 18rem;">
+								<img src="/images/icon-vofly-user.png" class="card-img-top" alt="VoFly App" width="256">
+								<div class="card-body">
+								  <h5 class="card-title">VoFly App</h5>
+								  <p class="card-text">Aplicación para los usuarios que desean realizar sus pedidos</p>
+								  <a href="/apks/vofly-app-e4915640f5d04d5aa70c91ff67bd4586-signed.apk" download="vofly-app-3.apk" class="btn btn-primary">Descárgala</a>
+								</div>
+							  </div>
+						</div>
+						<div class="d-flex app col-md-5 justify-content-center">
+							<div class="card" style="width: 18rem;">
+								<img src="/images/icon-vofly-driver.png" class="card-img-top" alt="VoFly App" width="256">
+								<div class="card-body">
+								  <h5 class="card-title">VoFly Driver</h5>
+								  <p class="card-text">Aplicación para nuestros repartidores de pedidos</p>
+								  <a href="/apks/vofly-driver-app-71ad6b035fc4438c8f048ab06ded288e-signed.apk" download="vofly-driver-3.apk" class="btn btn-primary">Descárgala</a>
+								</div>
+							  </div>
+						</div>
+					</div>
+					<p class="h3 text-align-center">Pronto estaremos en Google Play</p>
+				</div>
+			</div>
 		</div>
+		<script>
+			$(function () {
+				$(".toggle-card").on("click", function(e) {
+					$(".apk-blq").toggleClass("view");
+					if ($(".apk-blq").hasClass("view")) {
+						$(".toggle-card").text("Ocultar")
+					} else {
+						$(".toggle-card").text("Descarga nuestra app")
+					}
+				})
+			})
+		</script>
 	</body>
 </html>

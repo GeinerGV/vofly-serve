@@ -40,6 +40,10 @@
             <li></li>
             <li></li>
         </ul>
+        <div class="ocean">
+            <div class="wave"></div>
+            <div class="wave"></div>
+        </div>
     </div>
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-dark bg-primary shadow-sm w-100">

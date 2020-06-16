@@ -50,7 +50,7 @@
 				</button>
 			</div>
 			<div class="modal-body">
-				<form class="needs-validation" id="form-data" method="POST">
+				<form class="needs-validation" id="form-data" method="POST" novalidate>
 					@csrf
 					@yield('edit-form-content')
 					<input type="hidden" name="id" id="rowid">

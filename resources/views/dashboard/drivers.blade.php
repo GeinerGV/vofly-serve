@@ -58,7 +58,7 @@
 			@endif
 			<td>{{$item->user->name}}</td>
 			<td>{{$item->user->email}}</td>
-			<td>{{$item->user->phone}}</td>
+			<td>{{str_replace("+51", "", $item->user->phone)}}</td>
 			<td>{{$item->user->direccion}}</td>
 		</tr>
 	@endforeach
@@ -66,7 +66,7 @@
 
 @section('edit-form-content')
 	<div class="form-group">
-		<label for="nombre">DNI</label>
+		<label for="dni">DNI</label>
 		<input type="text" class="form-control" id="dni" name="dni" placeholder="DNI">
 	</div>
 	<div class="form-row">
@@ -79,19 +79,7 @@
 			</div>
 		</div>
 	</div>
-	{{-- <div class="form-group">
-		<label for="descripcion">Activo</label>
-		<input type="text" class="form-control" id="descripcion" name="descripcion" placeholder="Descripción">
-	</div>
-	<div class="form-group">
-		<label for="precio">Precio</label>
-		<input type="number" class="form-control" id="precio" name="precio"placeholder="Precio">
-	</div>
-	<div class="form-group">
-		<label for="precio">Límite</label>
-		<input type="number" class="form-control" id="limite" name="limite"placeholder="Sín límites">
-	</div> --}}
-	@parent
+	{{-- @parent --}}
 @endsection
 
 

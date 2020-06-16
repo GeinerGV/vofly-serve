@@ -13,7 +13,12 @@
     }) */
     $(function () {
         $("#form-data").on("submit", function(e) {
-            //e.preventDefault();
+            if (e.target.checkValidity() === false) {
+                e.preventDefault();
+                e.stopPropagation();
+                $("#form-data :invalid").addClass("is-invalid")
+                $("#form-data :valid").removeClass("is-invalid")
+            }
         })
         
         $("#modal-data-table").on("show.bs.modal", function (e) {
