@@ -15,7 +15,7 @@ class DriverLoginController extends Controller
 		//error_log("data prelogin: ==========" . json_encode($data));
 		return Validator::make($data, [
 			'phone' => array_merge(User::PHONE_BASIC_VALIDATE_RULES),
-			'email' => array_merge(User::EMAIL_BASIC_VALIDATE_RULES, ['exists:users']),
+			'email' => array_merge(User::EMAIL_BASIC_VALIDATE_RULES),
 			'pais' => User::PAIS_BASIC_VALIDATE_RULES,
 		]);
 	}
@@ -23,9 +23,9 @@ class DriverLoginController extends Controller
 	public function prelogin(Request $request) {
 		$this->prevalidator($request->all())->validate();
 		$phone = "+" . $request->pais . $request->phone;
-		Validator::make(["phone" => $phone], [
+		/*Validator::make(["phone" => $phone], [
 			"phone" => ['exists:users']
-		])->validate();
+		])->validate();*/
 		$user = User::where("phone", $phone)->where('email', $request->email)->first();
         $result = [];
 		//$request->validate(static::PrevalidateRules);

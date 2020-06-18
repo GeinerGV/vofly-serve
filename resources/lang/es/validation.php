@@ -1,7 +1,7 @@
 <?php
 
 return [
-    #'unique'=>'El :attribute ya ha sido tomado.',
+    'unique'=>'Ya fue registrado',
     'email'=>'Debe ser una cuenta de correo válida. ',
     'digits' => 'Debe tener :digits dígitos. ',
     'starts_with' => 'Debe iniciar con: :values.',

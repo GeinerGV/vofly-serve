@@ -113,9 +113,10 @@ class HomeController extends Controller
 			'email' => array_merge(["required"], User::EMAIL_BASIC_VALIDATE_RULES),
 			"id" => ["required", "exists:users"]
 		]);
+		$user = User::find($request->id);
+		$userPrev = array_merge($user->toArray());
 		if (!$validator->fails()) {
 			try {
-				$user = User::find($request->id);
 				$user->name = $request->name;
 				$user->phone = "+51".$request->phone;
 				$user->direccion = $request->direccion;
@@ -123,6 +124,10 @@ class HomeController extends Controller
 				$user->save();
 				return ["success", "Actualización exitosa"];
 			} catch (\Throwable $th) {
+				$user->name = $userPrev['name'];
+				$user->phone = $userPrev['phone'];
+				$user->direccion = $userPrev['direccion'];
+				$user->email = $userPrev['email'];
 				return ["danger", "Error con los datos", "El teléfono o email pertenecen a otros usuarios"];
 			}
 		} else {

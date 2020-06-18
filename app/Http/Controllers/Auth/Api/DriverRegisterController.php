@@ -47,14 +47,20 @@ class DriverRegisterController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function preregister(Request $request) {
-		$this->prevalidator($request->all())->validate();
-		Validator::make(["phone" => $request->pais . $request->phone], [
+		$validator1 = $this->prevalidator($request->all());
+		$validator2 = Validator::make(["phone" => "+" . $request->pais . $request->phone], [
 			"phone" => ['unique:users']
-		])->validate();
+		]);
 		$result = [];
-		//$request->validate(static::PrevalidateRules);
-		$result["status"] = Controller::STATUS_SUCCES;
-		#$result["data"] = $request->all();
+		if ($validator1->fails() || $validator2->fails()) {
+			$result["errors"] = array_merge(
+				$validator1->errors()->toArray(), $validator2->errors()->toArray()
+			);
+		} else {
+			//$request->validate(static::PrevalidateRules);
+			$result["status"] = Controller::STATUS_SUCCES;
+			#$result["data"] = $request->all();
+		}
 		return response()->json($result, 200);
 	}
 
