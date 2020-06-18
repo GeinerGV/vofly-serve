@@ -63,6 +63,6 @@
 		</div>
 	</div>
 </div>
-<script src="{{ asset('js/tables.js') }}" defer></script>
+<script src="{{ mix('js/tables.js') }}" defer></script>
 @yield("scripts")
 @endsection

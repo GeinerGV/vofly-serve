@@ -4,8 +4,8 @@
 		if (!window.TableData) return window.TableData = JSON.parse($('<textarea />').html("{{ json_encode($pagination->items()) }}").text());
 		return window.TableData;
     }
-    $("#table-data thead > tr").prepend("<th></th>");
-    $("#table-data tbody > tr").prepend('<td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-data-table">editar</button></td>')
+    $("#table-data thead > tr").append("<th></th>");
+    $("#table-data tbody > tr").append('<td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-data-table">editar</button></td>')
     /* $(function() {
         $("#modal-data-table").on("show.bs.modal", function (e) {
             if(window.selectNewRow) window.selectNewRow($(e.relatedTarget).parents("tr").index());

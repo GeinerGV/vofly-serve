@@ -18,6 +18,4 @@ mix.sass('resources/sass/home.scss', 'public/css/page');
 mix.js("resources/js/home/dashboard.js", "public/js/");
 mix.js("resources/js/home/tables.js", "public/js/");
 
-if (mix.inProduction()) {
-   mix.version();
-}
+mix.version();

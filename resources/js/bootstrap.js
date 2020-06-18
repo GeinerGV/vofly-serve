@@ -22,11 +22,11 @@ try {
 import axios from "axios";
 window.axios = axios;
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-if (typeof AUTH_TOKEN !== "undefined") axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
 axios.defaults.baseURL = location.origin;
 window.axiosApi = axios.create({
     baseURL: axios.defaults.baseURL + "/api/",
 })
+if (typeof AUTH_TOKEN !== "undefined") axiosApi.defaults.headers.common['Authorization'] = AUTH_TOKEN;
 axiosApi.defaults.headers.common['Accept'] = 'application/json';
 axiosApi.defaults.headers.post['Content-Type'] = 'application/json';
 

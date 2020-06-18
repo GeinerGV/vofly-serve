@@ -185,7 +185,7 @@
 	<canvas id="dashboardChart"></canvas>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
-<script src="{{ asset('js/dashboard.js') }}" defer></script>
+<script src="{{ mix('js/dashboard.js') }}" defer></script>
 		@break
 	@default
 		@include('layouts.dashboard.simpletable', ["pagination"=>$pagination])
