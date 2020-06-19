@@ -4,6 +4,8 @@
 	$heads = ["#", "Nombre", "Correo", "Celular", "Dirección"];
 	$row = 0;
 @endphp
+
+@section('title', 'Usuarios')
 @section('dashboard-table-head')
 	@foreach ($heads as $item)
 	<th scope="col">{{$item}}</th>
@@ -63,34 +65,9 @@
 @endsection
 
 @section('scripts')
-@include('layouts.dashboard.edittable', ['pagination'=>$pagination])
-<script>
-	window.selectNewRow = function(id) {
-		$("#name").val(lastRowData.name);
-		$("#email").val(lastRowData.email);
-		$("#phone").val(lastRowData.phone.replace("+51", ""));
-		$("#direccion").val(lastRowData.direccion);
-	}
-	$(function() {
-		$("#guardar-cambios").on("click", function (e) {
-			/* if (!$("#phone").val() || $("#phone").val().length!==9) {
-				$("#phone").addClass("is-invalid")
-				$("#phone").focus();
-				return;
-			} else {
-				$("#phone").removeClass("is-invalid")
-			}
-			if (!$("#name").val()) {
-				$("#name").addClass("is-invalid")
-				$("#name").focus();
-				return;
-			} else {
-				$("#name").removeClass("is-invalid")
-			} */
-			$("#form-data").submit(); 
-		})
-	})
-</script>
+
+@include('layouts.dashboard.edittable', ['pagination'=>$pagination, 'heads'=>$heads])
+<script src="{{ mix("/js/components/Usuarios.js") }}"></script>
 @endsection
 
 @section('dashboard-table-pagination')

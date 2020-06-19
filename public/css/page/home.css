@@ -1,1 +1,81 @@
-main>.container,main>.container-fluid{background-color:rgba(227,231,234,.4);flex:1}.dash-header{background-color:#f7f7f7;color:#404447}.dash-aside-cnt{background-color:rgba(29,41,57,.7)}aside .list-group-item-action{background-color:transparent;color:#adb5bd;border:0}.list-group-item-action:active:not(.active),.list-group-item-action:focus:not(.active),.list-group-item-action:hover:not(.active){color:#fff;background-color:transparent}.list-group-item-action.active,.list-group-item-action:active.active,.list-group-item-action:focus.active,.list-group-item-action:hover.active{color:#fff;background-color:#00b297}.card:hover .select_data_type{visibility:visible}.icon-data-type-cnt{position:relative}.select_data_type{position:absolute;top:0;right:0;border-top-right-radius:0;justify-content:center;align-items:center;display:flex;visibility:hidden}.chart-cnt{background-color:hsla(0,0%,100%,.6);display:flex;flex-wrap:wrap;margin-right:-15px}.table-blq{background-color:hsla(0,0%,100%,.4);margin-left:-15px;margin-right:-15px;padding:1.5em}.table-blq .table-cnt{width:100%}.pagination-cnt{width:100%;display:flex;flex-flow:row wrap;justify-content:center;align-items:center}
+main > .container,
+main > .container-fluid {
+  background-color: rgba(227, 231, 234, 0.4);
+  flex: 1;
+}
+
+.dash-header {
+  background-color: #f7f7f7;
+  color: #404447;
+}
+
+.dash-aside-cnt {
+  background-color: rgba(29, 41, 57, 0.7);
+}
+
+aside .list-group-item-action {
+  background-color: transparent;
+  color: #adb5bd;
+  border: 0;
+}
+
+.list-group-item-action:hover:not(.active),
+.list-group-item-action:focus:not(.active),
+.list-group-item-action:active:not(.active) {
+  color: white;
+  background-color: transparent;
+}
+
+.list-group-item-action:hover.active,
+.list-group-item-action:focus.active,
+.list-group-item-action:active.active,
+.list-group-item-action.active {
+  color: white;
+  background-color: #00b297;
+}
+
+.card:hover .select_data_type {
+  visibility: visible;
+}
+
+.icon-data-type-cnt {
+  position: relative;
+}
+
+.select_data_type {
+  position: absolute;
+  top: 0;
+  right: 0;
+  border-top-right-radius: 0;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  visibility: hidden;
+}
+
+.chart-cnt {
+  background-color: rgba(255, 255, 255, 0.6);
+  display: flex;
+  flex-wrap: wrap;
+  margin-right: -15px;
+}
+
+.table-blq {
+  background-color: rgba(255, 255, 255, 0.4);
+  margin-left: -15px;
+  margin-right: -15px;
+  padding: 1.5em;
+}
+
+.table-blq .table-cnt {
+  width: 100%;
+}
+
+.pagination-cnt {
+  width: 100%;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  align-items: center;
+}
+

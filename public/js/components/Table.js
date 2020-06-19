@@ -81,7 +81,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1);
+/******/ 	return __webpack_require__(__webpack_require__.s = 5);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -28977,38 +28977,14 @@ if (document.getElementById('tbl-blq') && window.PAGINATION_DATA) {
 
 /***/ }),
 
-/***/ "./resources/js/home/tables.js":
-/*!*************************************!*\
-  !*** ./resources/js/home/tables.js ***!
-  \*************************************/
-/*! no exports provided */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _components_Table__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../components/Table */ "./resources/js/components/Table.jsx");
-/*$("#len_rows").on("change", function() {
-    const {search} = location;
-    const len = this.value;
-    const params = new URLSearchParams(search ? search.substr(1, length) : "");
-    if (len) params.set("len", len);
-    else params.delete("len");
-    const str_params = params.toString();
-    const url = location.origin+location.pathname + (str_params ? '?' + str_params : "");
-    location.href = url;
-});*/
- //$("#currentTable tbody td")
-
-/***/ }),
-
-/***/ 1:
-/*!*******************************************!*\
-  !*** multi ./resources/js/home/tables.js ***!
-  \*******************************************/
+/***/ 5:
+/*!*************************************************!*\
+  !*** multi ./resources/js/components/Table.jsx ***!
+  \*************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! E:\Proyectos\Trabajo\vofly-serve\resources\js\home\tables.js */"./resources/js/home/tables.js");
+module.exports = __webpack_require__(/*! E:\Proyectos\Trabajo\vofly-serve\resources\js\components\Table.jsx */"./resources/js/components/Table.jsx");
 
 
 /***/ })

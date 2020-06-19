@@ -10,13 +10,11 @@
     @endphp
 @endauth
 <script>
-    (function () {
-        var ta = document.createElement("textarea");
-        ta.innerHTML = "{{ json_encode($deliverydata) }}";
-        const txt = ta.innerText.replace(/\\/g, "\\\\");
+    var ta = document.createElement("textarea");
+    ta.innerHTML = "{{ json_encode($deliverydata) }}";
+    const txt = ta.innerText.replace(/\\/g, "\\\\").replace(/\n/g, "\\n");
 
-        window.DELIVERY_DATA = JSON.parse(txt);
-    })()
+    window.DELIVERY_DATA = JSON.parse(txt);
 </script>
 <script src="{{mix("js/track.js")}}"></script>
 <script async defer

@@ -1,8 +1,10 @@
 @extends('layouts.dashboard.table')
 @php
-	$heads = ["#", "Nombre", "Descripción", "Precio", "Límite"];
+	$heads = ["Nombre", "Descripción", "Precio", "Límite"];
 	$row = 0;
 @endphp
+
+@section('title', 'Planes de pago')
 
 @section('alert')
 	@if (isset($alert))
@@ -16,6 +18,7 @@
 @endsection
 
 @section('dashboard-table-head')
+	<th scope="col">#</th>
 	@foreach ($heads as $item)
 	<th scope="col">{{$item}}</th>
 	@endforeach
@@ -58,32 +61,6 @@
 @endsection
 
 @section('scripts')
-	@include('layouts.dashboard.edittable', ['pagination'=>$pagination])
-	<script>
-		var selectNewRow = function(id) {
-			var lastRowData = getTableData()[id];
-			$("#nombre").val(lastRowData.nombre);
-			$("#descripcion").val(lastRowData.descripcion);
-			$("#precio").val(lastRowData.precio);
-			$("#limite").val(lastRowData.limite);
-		}
-		var lastRowData = {};
-		$(function() {
-			$("#guardar-cambios").on("click", function (e) {
-				if (!parseFloat($("#precio").val()) || parseFloat($("#precio").val())<0) {
-					$("#precio").addClass("is-invalid")
-					return;
-				} else {
-					$("#precio").removeClass("is-invalid")
-				}
-				if (($("#limite").val()+"").length && (!parseFloat($("#limite").val()) || parseFloat($("#limite").val())<0)) {
-					$("#limite").addClass("is-invalid")
-					return;
-				} else {
-					$("#limite").removeClass("is-invalid")
-				}
-				$("#form-data").submit();
-			})
-		})
-	</script>
+	@include('layouts.dashboard.edittable', ['pagination'=>$pagination, 'heads'=>$heads])
+	<script src="{{ mix("/js/components/Pagos.js") }}"></script>
 @endsection

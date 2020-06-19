@@ -1,4 +1,4 @@
-import { fetcherApiAuth } from "../functions";
+import { fetcherApiAuth } from "../funciones";
 
 var ctxUsers = document.getElementById('dashboardChart').getContext('2d');
 	

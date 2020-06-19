@@ -1,5 +1,7 @@
 @extends('dashboard.usuarios')
 
+@section('title', 'Drivers')
+
 @section('alert')
 	@if (isset($alert))
 	<div class="alert alert-{{$alert[0]}} alert-dismissible fade show" role="alert">
@@ -84,23 +86,6 @@
 
 
 @section('scripts')
-@include('layouts.dashboard.edittable', ['pagination'=>$pagination])
-<script>
-	window.selectNewRow = function(id) {
-		$("#dni").val(lastRowData.dni);
-		$("#habilitado").prop("checked", !!lastRowData.verified_at);
-	}
-	$(function() {
-		$("#guardar-cambios").on("click", function (e) {
-			if (!$("#dni").val() || $("#dni").val().length!==8) {
-				$("#dni").addClass("is-invalid")
-				$("#dni").focus();
-				return;
-			} else {
-				$("#dni").removeClass("is-invalid")
-			}
-			$("#form-data").submit(); 
-		})
-	})
-</script>
+@include('layouts.dashboard.edittable', ['pagination'=>$pagination, 'heads'=>$heads])
+<script src="{{ mix("/js/components/Drivers.js") }}"></script>
 @endsection

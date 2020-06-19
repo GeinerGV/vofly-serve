@@ -26,7 +26,7 @@ Route::get('/politicas', function () {
 
 Auth::routes(['verify' => true]);
 
-Route::get('/dashboard', 'HomeController@index')->middleware('verified');
+Route::get('/dashboard', 'HomeController@index')->middleware('verified')->name('dashboard');
 Route::get('/drivers', 'HomeController@index')->middleware('verified');
 Route::post('/drivers', 'HomeController@index')->middleware('verified');
 Route::get('/usuarios', 'HomeController@index')->middleware('verified');

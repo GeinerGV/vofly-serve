@@ -4,6 +4,8 @@
 	$path = request()->path();
 @endphp
 
+@section('title', 'Dashboard')
+
 @section('dash-content')
 @switch($path)
 	@case("dashboard")

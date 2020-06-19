@@ -4,6 +4,8 @@
 	
 	$row = ($pagination->currentPage()-1)*$maxlen;
 @endphp
+
+@section('title', 'Pedidos')
 @section('dashboard-table-head')
 	@foreach ($heads as $item)
 	<th scope="col">{{$item}}</th>
@@ -42,5 +44,7 @@
 	@include('layouts.dashboard.pagination', ['pagination'=>$pagination])
 @endsection
 @section('scripts')
-@include('layouts.dashboard.edittable', ['pagination'=>$pagination])
+
+@include('layouts.dashboard.edittable', ['pagination'=>$pagination, 'heads'=>$heads])
+<script src="{{ mix("/js/components/Pedidos.js") }}"></script>
 @endsection

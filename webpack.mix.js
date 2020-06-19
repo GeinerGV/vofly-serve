@@ -20,4 +20,16 @@ mix.js("resources/js/home/dashboard.js", "public/js/");
 mix.js("resources/js/home/tables.js", "public/js/");
 mix.js("resources/js/track.js", "public/js/");
 
-mix.version();
+mix.react("resources/js/components/Table.jsx", "public/js/components");
+mix.react("resources/js/components/Pagos.jsx", "public/js/components");
+mix.react("resources/js/components/Drivers.jsx", "public/js/components");
+mix.react("resources/js/components/Usuarios.jsx", "public/js/components");
+mix.react("resources/js/components/Pedidos.jsx", "public/js/components");
+mix.js("resources/js/funciones.js", "public/js/");
+
+mix.babelConfig({"plugins": ["@babel/plugin-proposal-class-properties"]});
+
+if (mix.inProduction()) {
+	mix.version();
+}
+
