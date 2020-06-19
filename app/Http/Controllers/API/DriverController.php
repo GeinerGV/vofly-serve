@@ -79,8 +79,17 @@ class DriverController extends Controller
 				if ($delivery && !$delivery->driver_id) {
 					$delivery->driver()->associate($request->user()->driver);
 					$delivery->estado = Delivery::STATUS_INICIADO;
-					$delivery->save();
+					
+					$location = $request->user()->driver->location;
 
+					$past = $delivery->location ? $delivery->location : [];
+					$delivery->location = array_merge($past, [[
+						"latitude"=>$location["coords"]["latitude"],
+						"longitude"=>$location["coords"]["longitude"],
+					]]);
+
+					
+					$delivery->save();
 
 					/**
 					 * @var Database

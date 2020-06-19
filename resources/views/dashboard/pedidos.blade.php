@@ -32,12 +32,15 @@
 	@endforeach
 @endsection
 @php
-	$distancia = 2;
+	/* $distancia = 2;
 	$pag_init = $pagination->currentPage()-$distancia;
 	if ($pag_init<1) $pag_init =  1;
 	$pag_end = $pagination->currentPage() + 2 + ($pagination->currentPage()-$pag_init);
-	if ($pag_end>$pagination->lastPage()) $pag_end = $pagination->lastPage();
+	if ($pag_end>$pagination->lastPage()) $pag_end = $pagination->lastPage(); */
 @endphp
 @section('dashboard-table-pagination')
 	@include('layouts.dashboard.pagination', ['pagination'=>$pagination])
+@endsection
+@section('scripts')
+@include('layouts.dashboard.edittable', ['pagination'=>$pagination])
 @endsection

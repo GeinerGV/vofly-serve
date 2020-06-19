@@ -1,7 +1,11 @@
 
 <script>
-	function getTableData() {
-		if (!window.TableData) return window.TableData = JSON.parse($('<textarea />').html("{{ json_encode($pagination->items()) }}").text());
+	function getTableData(getText) {
+        var ta = document.createElement("textarea");
+        ta.innerHTML = "{{ json_encode($pagination->items()) }}";
+        const txt = ta.innerText.replace(/\\/g, "\\\\");
+        if (getText) return txt;
+		if (!window.TableData) return window.TableData = JSON.parse(txt);
 		return window.TableData;
     }
     $("#table-data thead > tr").append("<th></th>");

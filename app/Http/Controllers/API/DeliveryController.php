@@ -99,6 +99,8 @@ class DeliveryController extends Controller
 		#$delivery->entrega()->save($recojo);
 
 		$delivery->push();
+		$delivery->trakcid = hash('adler32', $delivery->id) . hash('adler32', time());
+		$delivery->save();
 		//$result["delivery"] = $delivery;
 
 		//$firestore = app('firebase.firestore');
