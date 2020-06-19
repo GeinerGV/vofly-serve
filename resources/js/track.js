@@ -351,7 +351,7 @@ window.initMap = function () {
 		puntosExtras.push(extra);
 	}
 
-	DELIVERY_DATA.location.forEach((coord, idx) => {
+	(DELIVERY_DATA.location||[]).forEach((coord, idx) => {
 		AddPuntos(parseCoordToLatLng(coord));
 	});
 
