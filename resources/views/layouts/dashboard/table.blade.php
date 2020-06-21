@@ -42,7 +42,6 @@
 	</div>
 	@yield('dashboard-table-pagination')
 </div>
-<div id="modal-root"></div>
 <script>
 
 window.GetJsonEncodeData = function (encode) {

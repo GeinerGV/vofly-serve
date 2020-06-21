@@ -1,5 +1,6 @@
 import React from "react"
-import {distanciaFormatoStr, getEstado} from "../funciones"
+import {distanciaFormatoStr, getEstado, getDisplayPhone} from "../funciones"
+import {FormBody} from "./FormBodyComponent"
 
 window.COLUMNAS_TABLE = HEADS.filter(head=>head!=="#").map(head=>{
     let col = {displayName: head};
@@ -8,9 +9,9 @@ window.COLUMNAS_TABLE = HEADS.filter(head=>head!=="#").map(head=>{
             <th scope="row">{{++$row}}</th>
             <td>{{isset($item->user) ? $item->user->phone : $item->user_id}}</td>
             <td>{{isset($item->driver) ? $item->driver->dni : ""}}</td>
-            <td>{{$item->recojo->place->direccion}}</td>
-            <td>{{$item->entrega->place->direccion}}</td>
-            <td>{{$item->carga->tipo}}</td>
+            <td>{{$item->recogible->place->direccion}}</td>
+            <td>{{$item->entregable->place->direccion}}</td>
+            <td>{{$item->cargable->tipo}}</td>
             <td>{{$item->plan->nombre}}</td>
             <td>{{$item->distanciaFormatoStr()}}</td>
             <td>{{$item->getEstado()}}</td>
@@ -28,17 +29,17 @@ window.COLUMNAS_TABLE = HEADS.filter(head=>head!=="#").map(head=>{
             break;
         case "Origen":
             col.getDisplayValue = (row) => {
-                return row.recojo.place.direccion;
+                return row.recogible.place.direccion;
             }
             break;
         case "Destino":
             col.getDisplayValue = (row) => {
-                return row.entrega.place.direccion;
+                return row.entregable.place.direccion;
             }
             break;
         case "Pedido":
             col.getDisplayValue = (row) => {
-                return row.carga.tipo;
+                return row.cargable.tipo;
             }
             break;
         case "Plan":
@@ -59,3 +60,53 @@ window.COLUMNAS_TABLE = HEADS.filter(head=>head!=="#").map(head=>{
     }
     return col;
 })
+
+class PedidosUpdateForm extends FormBody {
+
+	state = {
+		user: "",
+		driver: "",
+		origen: "",
+		destino: "",
+		pedido: "",
+		plan: "",
+		recorrido: "",
+		estado: "",
+	}
+	
+	propsToState = () => {
+		return {
+			user: this.props.user?getDisplayPhone(this.props.user.phone):this.props.user_id||"",
+			driver: this.props.driver_id?(this.props.driver?this.props.driver.dni:this.props.driver_id):"",
+			origen: "",
+			destino: "",
+			pedido: "",
+			plan: "",
+			recorrido: this.props.distancia||"",
+			estado: this.props.estado||"",
+		}
+	}
+
+	inputsProps = [
+		{name: "user", className: "form-control", label: "Usuario", type: "text", list: "users",
+			maxLength: 9, required: true},
+		{name: "driver", className: "form-control", label: "Driver", type: "text", list: "drivers",
+			maxLength: 8, required: true},
+	]
+	
+	render() {
+		let inputs = this.getInputs();
+		return <>
+			<div className="form-row">
+				<div className="form-group col-md-6">
+					{inputs.user}
+				</div>
+				<div className="form-group col-md-6">
+					{inputs.driver}
+				</div>
+			</div>
+		</>
+	}
+}
+
+window.EditFormComponent = PedidosUpdateForm

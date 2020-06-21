@@ -32,6 +32,7 @@ Route::post('/drivers', 'HomeController@index')->middleware('verified');
 Route::get('/usuarios', 'HomeController@index')->middleware('verified');
 Route::post('/usuarios', 'HomeController@index')->middleware('verified');
 Route::get('/pedidos', 'HomeController@index')->middleware('verified');
+Route::post('/pedidos', 'HomeController@index')->middleware('verified');
 Route::get('/pagos', 'HomeController@index')->middleware('verified');
 Route::post('/pagos', 'HomeController@index')->middleware('verified');
 

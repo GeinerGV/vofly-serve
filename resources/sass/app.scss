@@ -309,3 +309,14 @@ main {
 		display: flex;
 	}
 }
+
+$top-alert-root: 10px;
+
+#alert-root {
+	position: fixed;
+	top: $top-alert-root;
+	max-width: var(--breakpoint-lg);
+	left: 50%;
+	transform: translateX(-50%);
+	z-index: 2000;
+}

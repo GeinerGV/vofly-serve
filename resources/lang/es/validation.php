@@ -13,6 +13,7 @@ return [
         'string' => 'Debe contener como máximo :max caracteres.',
         'array' => 'The :attribute may not have more than :max items.',
     ],
+	'required' => 'El valor es requerido.',
 ];
 
 ?>

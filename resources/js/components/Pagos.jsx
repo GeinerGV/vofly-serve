@@ -1,4 +1,6 @@
 import React from 'react';
+import {FormBody} from "./FormBodyComponent"
+import {getDisplayPrecio} from "../funciones";
 
 window.COLUMNAS_TABLE = HEADS.filter(head=>head!=="#").map(head=>{
 	let col = {displayName: head};
@@ -15,25 +17,32 @@ window.COLUMNAS_TABLE = HEADS.filter(head=>head!=="#").map(head=>{
 			break;
 		case "Precio":
 			col.getDisplayValue = (row) => {
-				return row.precio;
+				return getDisplayPrecio(row.precio);
 			}
 			break;
 		case "Límite":
 			col.getDisplayValue = (row) => {
-				return row.limite;
+				return Number(row.limite) && getDisplayPrecio(row.limite) || "";
 			}
 			break;
 	}
 	return col;
 })
 
-class PagosEditForm extends React.Component {
+class PagosEditForm extends FormBody {
 
 	static title = "Editar plan de pago"
 
-	constructor(props) {
-		super(props);
-		this.state = {
+	
+	state = {
+		descripcion: "",
+		nombre:  "",
+		precio: "",
+		limite: "",
+	}
+	
+	propsToState = () => {
+		return {
 			descripcion: this.props.descripcion||"",
 			nombre:  this.props.nombre||"",
 			precio: this.props.precio||"",
@@ -41,43 +50,21 @@ class PagosEditForm extends React.Component {
 		}
 	}
 
-	handleChangeInput = (event) => {
-		this.setState({[event.target.name]: event.target.value});
-	}
+	inputsProps = [
+		{type:"text" ,className:"form-control" ,id:"nombre" ,name:"nombre" ,placeholder:"Nombre",
+			label: "Nombre", required: true
+		},
+		{type:"text", className:"form-control", id:"descripcion", name:"descripcion", 
+			placeholder:"Descripción", label:"Descripción", required: true},
+		{type:"number", className:"form-control", id:"precio", name:"precio", 
+			placeholder:"Precio", label:"Precio", required: true},
+		{type:"number", className:"form-control", id:"limite", name:"limite", 
+			placeholder:"Sín límites", label:"Límite"}
 
-	componentDidUpdate(prevProps) {
-		if (prevProps!=this.props) {
-			this.setState({
-				descripcion: this.props.descripcion||"",
-				nombre:  this.props.nombre||"",
-				precio: this.props.precio||"",
-				limite: this.props.limite||"",
-			})
-		}
-	}
+	]
 
 	render() {
-		let inputs = {};
-		[
-			{type:"text" ,className:"form-control" ,id:"nombre" ,name:"nombre" ,placeholder:"Nombre",
-				label: "Nombre"
-			},
-			{type:"text", className:"form-control", id:"descripcion", name:"descripcion", 
-				placeholder:"Descripción", label:"Descripción"},
-			{type:"number", className:"form-control", id:"precio", name:"precio", 
-				placeholder:"Precio", label:"Precio"},
-			{type:"number", className:"form-control", id:"limite", name:"limite", 
-				placeholder:"Sín límites", label:"Precio"}
-
-		].forEach(val=>{
-			inputs[val.name] = <>
-				{val.label && <label htmlFor={val.id||val.name}>{val.label}</label>}
-				<input id={val.name} value={this.state[val.name]} 
-					onChange={this.handleChangeInput}  placeholder={val.label||undefined} {...val}
-				/>
-			</>
-		})
-
+		let inputs = this.getInputs();
 		return <>
 			<div className="form-group">
 				{inputs.nombre}

@@ -81,7 +81,7 @@ class DriverFormUpdate extends FormBody {
 	propsToState = () => {
 		return {
 			dni: this.props.dni||"",
-			verified_at: Boolean(this.props.verified_at)
+			verified_at: !!this.props.verified_at
 		}
 	}
 
@@ -93,6 +93,11 @@ class DriverFormUpdate extends FormBody {
 		},
 
 	]
+
+	isValidForm = () => {
+		//let isValid = super.isValidForm();
+		return this._getCurrentValidator();
+	}
 
 	render() {
         let inputs = this.getInputs();

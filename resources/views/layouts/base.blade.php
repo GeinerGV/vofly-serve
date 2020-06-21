@@ -46,11 +46,13 @@
         </div>
     </div>
     <div id="app">
+		<div id="alert-root"></div>
         @yield('navbar')
 
         <main>
             @yield('content')
         </main>
+		<div id="modal-root"></div>
     </div>
 </body>
 </html>

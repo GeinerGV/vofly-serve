@@ -43,7 +43,15 @@ window.GetJsonEncodeData = function (encode) {
 }
 
 export function getDisplayPhone(phone) {
-    return (phone||"").replace("+51", "");
+    return ((phone||"")+"").replace("+51", "");
+}
+
+export function isFloat(n) {
+	return Number(n) === n && Number(n) % 1 !== 0;
+}
+
+export function getDisplayPrecio(precio) {
+    return !Number.isNaN(Number(precio)) ? Number(precio).toFixed(2) : "";
 }
 
 export function distanciaFormatoStr(distancia) {

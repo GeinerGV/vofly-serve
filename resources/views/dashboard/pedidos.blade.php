@@ -1,8 +1,6 @@
 @extends('layouts.dashboard.table')
 @php
 	$heads = ["#", "Usuario", "Driver", "Origen", "Destino", "Pedido", "Plan", "Recorrido", "Estado"];
-	
-	$row = ($pagination->currentPage()-1)*$maxlen;
 @endphp
 
 @section('title', 'Pedidos')
@@ -24,9 +22,9 @@
             <th scope="row">{{++$row}}</th>
             <td>{{isset($item->user) ? $item->user->phone : $item->user_id}}</td>
             <td>{{isset($item->driver) ? $item->driver->dni : ""}}</td>
-            <td>{{$item->recojo->place->direccion}}</td>
-            <td>{{$item->entrega->place->direccion}}</td>
-            <td>{{$item->carga->tipo}}</td>
+            <td>{{$item->recogible->place->direccion}}</td>
+            <td>{{$item->entregable->place->direccion}}</td>
+            <td>{{$item->cargable->tipo}}</td>
             <td>{{$item->plan->nombre}}</td>
             <td>{{$item->distanciaFormatoStr()}}</td>
             <td>{{$item->getEstado()}}</td>
