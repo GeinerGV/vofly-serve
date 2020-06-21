@@ -90,13 +90,14 @@ class HomeController extends Controller
 				if ($len!=15) $pagination->appends(['len' => $len]);
 				break;
 		}
-		if ($withPagination) {
+		if ($withPagination && $pagination) {
 			$result["pagination"] = $pagination;
-			$result['row'] = $row = ($pagination->currentPage()-1)*$len;
+			$result['row'] = ($pagination->currentPage()-1)*$len;
 		}
 		if ($len) $result["maxlen"] = $len;
 		if (View::exists('dashboard.'.request()->path())) $view = 'dashboard.'.request()->path();
 		if (!request()->wantsJson()) {
+			$result["pagination"] = $pagination;
 			return view($view, $result);
 		} else {
 			if (isset($result['alert'])) $result['status'] = $result['alert'][0];
