@@ -65,16 +65,25 @@
 			</div>
 			<div class="apk-card-cnt">
 				<a class="h5 btn text-align-center py-2 toggle-card">Descarga nuestra app</a>
-				<div style="flex: 1;">
+				<div style="flex: 1;" class="w-100">
 					<div class="apk-blq col-12">
 						<div class="row justify-content-around mb-3">
 							<div class="d-flex app col-md-5 justify-content-center">
 								<div class="card mb-3" style="width: 18rem;">
 									<img src="/images/icon-vofly-user.png" class="card-img-top" alt="VoFly App" width="256">
 									<div class="card-body">
-									  <h5 class="card-title">VoFly App</h5>
-									  <p class="card-text">Aplicación para los usuarios que desean realizar sus pedidos</p>
-									  <a href="/apks/vofly-app-e4915640f5d04d5aa70c91ff67bd4586-signed.apk" download="vofly-app-3.apk" class="btn btn-primary">Descárgala</a>
+										<h5 class="card-title">VoFly App</h5>
+										<p class="card-text">Aplicación para los usuarios que desean realizar sus pedidos</p>
+										<div class="d-flex justify-content-center flex-wrap">
+											<a href="/apks/vofly-app-e4915640f5d04d5aa70c91ff67bd4586-signed.apk" download="vofly-app-3.apk" class="btn btn-primary mx-a">
+												<img width="35px" alt='APK disponible' src='/images/android.png'/>
+												Descárga el APK
+											</a>
+										  
+											<a target="_blank" href='https://play.google.com/store/apps/details?id=com.vofly.voflyapp&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'>
+												<img width="100%" alt='Disponible en Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/es-419_badge_web_generic.png'/>
+											</a>
+										</div>
 									</div>
 								  </div>
 							</div>
@@ -84,12 +93,20 @@
 									<div class="card-body">
 									  <h5 class="card-title">VoFly Driver</h5>
 									  <p class="card-text">Aplicación para nuestros repartidores de pedidos</p>
-									  <a href="/apks/vofly-driver-app-71ad6b035fc4438c8f048ab06ded288e-signed.apk" download="vofly-driver-3.apk" class="btn btn-primary">Descárgala</a>
+									  <div class="d-flex justify-content-center flex-wrap">
+											<a href="/apks/vofly-driver-app-815433e043b14ea6bc3a747138366b56-signed.apk" download="vofly-driver-3.1.apk" class="btn btn-primary">
+												<img width="35px" alt='APK disponible' src='/images/android.png'/>
+												Descarga el APK
+											</a>
+											<a target="_blank" href='https://play.google.com/store/apps/details?id=com.vofly.driverapp&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'>
+												<img alt='Disponible en Google Play' width="100%" src='https://play.google.com/intl/en_us/badges/static/images/badges/es-419_badge_web_generic.png'/>
+											</a>
+									  </div>
 									</div>
 								  </div>
 							</div>
 						</div>
-						<p class="h3 text-align-center">Pronto estaremos en Google Play</p>
+						{{-- <p class="h3 text-align-center">Pronto estaremos en Google Play</p> --}}
 					</div>
 				</div>
 			</div>
