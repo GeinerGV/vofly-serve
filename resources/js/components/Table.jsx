@@ -9,11 +9,12 @@ const ButtonCrud = (props) => {
 //data-toggle="modal" data-target="#modal-data-table"
 
 class Table extends React.Component {
+static per_page = 15;
 
 constructor(props) {
 	super(props);
 	this.state = {
-		lenRows: '',
+		lenRows: this.props.per_page!=Table.per_page ? parseInt(this.props.per_page) : '',
 		isDataChanged: false,
 		loadingUpdate: false,
 		rowIdEdit: undefined,
@@ -69,6 +70,17 @@ closeAlerta = (e) => {
 	e.target.closest(".alert").style.display = "none"
 }
 
+getSendUrl = () => {
+	const params = new URLSearchParams();
+	if (this.state.lenRows) {
+		params.set("len", this.state.lenRows);
+	}
+	if (this.props.current_page>1) {
+		params.set("pag", this.props.current_page);
+	}
+	return window.location.pathname + (params.toString() && ("?"+params.toString()));
+}
+
 setAlerta = (alert) => {
 	const alerta = (<Alert>
 		<div key={new Date().getTime()} className={"alert alert-"+alert[0]+" alert-dismissible fade show"} role="alert">
@@ -86,7 +98,7 @@ confirmEliminar = (e) => {
 	if (this.state.loadingDelete) return;
 	this.setState({loadingDelete: true}, ()=>{
 		const body = {delete: true, id: this.getRowToEdit().id}
-		axios.post(window.location.pathname, body).then(res=>{
+		axios.post(this.getSendUrl(), body).then(res=>{
 			console.log(res);
 			if (res.data?.status=="success") {
 				$("#modal-delete-row").modal("hide");
@@ -125,7 +137,7 @@ clickSave = (e) => {
 			const rowCurr =  this.getRowToEdit();
 			const body = {...dataChanged, ...(isCreator ? {create:true} : {id: rowCurr?.id})}
 			this.setState({loadingUpdate: true}, ()=>{
-				axios.post(window.location.pathname, body)
+				axios.post(this.getSendUrl(), body)
 					.then(res=>{
 						console.log(res);
 						
@@ -177,13 +189,13 @@ setDataChanged = (changed) => {
 }
 
 render() {
-	const columnas = this.props.columnas.map((col, idx)=>{
+	const columnas = this.props.columnas?.map((col, idx)=>{
 		return <th scope="col" key={"col-"+this.props.current_page+"-"+idx}>
 			{col.displayName}
 		</th>
 	})
 
-	const filas = this.props.data.map((row, idx)=>{
+	const filas = this.props.data?.map((row, idx)=>{
 		return <tr key={"row-"+this.props.current_page+"-"+idx}>
 			<th scope="col" key={"row-"+idx+"col-"+this.props.current_page}>
 				{this.getRowNumber(idx)}
@@ -328,7 +340,7 @@ render() {
 												{this.state.rowIdEdit>=0 && 
 													this.getRowNumber(this.state.rowIdEdit)}
 											</th>
-											{this.props.columnas.map((col, idx)=>{
+											{this.props.columnas?.map((col, idx)=>{
 												return <td key={"delete-row-col-"+this.props.current_page+"-"+idx}>
 													{col.getDisplayValue && this.getRowToEdit() ? col.getDisplayValue(this.getRowToEdit()) : ""}
 												</td>

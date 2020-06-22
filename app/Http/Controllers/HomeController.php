@@ -9,6 +9,7 @@ use App\Delivery;
 use App\User;
 use App\Driver;
 use App\Models\Pago\DeliveryPlan;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\View;
 use Kreait\Firebase\Database;
@@ -49,7 +50,7 @@ class HomeController extends Controller
 				])->validate();
 				$len = isset($request->len) ? intval($request->len) : 15;
 				$pag = isset($request->pag) ? intval($request->pag) : 1;
-				if ($request->isMethod('post') && (!$request->has("delete")||!$request->has("create"))) $withPagination = false;
+				if ($request->isMethod('post') && (!$request->has("delete") && !$request->has("create"))) $withPagination = false;
 				switch (request()->path()) {
 					case 'pedidos':
 						$data = Delivery::class;
@@ -223,11 +224,16 @@ class HomeController extends Controller
 			]);
 			try {
 				if (!$validator->fails()) {
-					$user = User::find($request->id);
-					$auth = app('firebase.auth');
-					$user->delete();
-					$auth->deleteUser($uid);
-					return ["success", "Se eliminó correctamente"];
+					try {
+						$user = User::find($request->id);
+						$uid = $user->uid;
+						$auth = app('firebase.auth');
+						$user->delete();
+						$auth->deleteUser($uid);
+						return ["success", "Se eliminó correctamente"];
+					} catch (\Throwable $th) {
+						return ["danger", "Hubo problemas durante en el intento."];
+					}
 				} else {
 					return ["danger", "Error con los datos", $validator->errors()];
 				}

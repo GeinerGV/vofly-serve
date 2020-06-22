@@ -31,5 +31,7 @@ mix.babelConfig({"plugins": ["@babel/plugin-proposal-class-properties"]});
 
 if (mix.inProduction()) {
 	mix.version();
+} else {
+	mix.sourceMaps(false);
 }
 
