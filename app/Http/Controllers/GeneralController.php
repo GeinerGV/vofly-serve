@@ -44,6 +44,10 @@ class GeneralController extends Controller
 			return response()->json($result);
 		}
 		$result["delivery"] = $delivery;
-        return view("track", $result);
+		if ($request->boolean("embed")) {
+			$result["embed"] = true;
+			return view("layouts.embed.track", $result);
+		}
+		return view("track", $result);
 	}
 }

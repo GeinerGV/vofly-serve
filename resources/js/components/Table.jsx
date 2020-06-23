@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import {Alert, Modal} from "./ComunComponents"
 
 const ButtonCrud = (props) => {
 	return <button type="button" className={"ml-1 btn btn-"+(props.tipo||"primary")} onClick={props.onClick}>
@@ -42,7 +43,7 @@ handleChangeLenRows = (event) => {
 }
 
 handleEditBtn = (rowid) => {
-	this.setState({rowIdEdit: rowid}, ()=> {
+	this.setState({rowIdEdit: rowid, }, ()=> {
 		$("#modal-data-table").modal("show");
 		//console.log(this.getRowToEdit(), rowid);
 	})
@@ -145,7 +146,12 @@ clickSave = (e) => {
 							//console.log(newRow);
 							//this.setState({rowToEdit: }, ()=>{
 							if (!isCreator) {
-								const newRow = {...rowCurr, ...dataChanged};
+								let newRow;
+								if (res.data?.alert && res.data.alert[2]) {
+									newRow = {...rowCurr, ...res.data.alert[2]};
+								} else {
+									newRow = {...rowCurr, ...dataChanged};
+								}
 								this.props.updatePaginationData(this.state.rowIdEdit, newRow)
 							}
 							else {
@@ -213,11 +219,11 @@ render() {
 							<path fillRule="evenodd" d="M12.146 6.354l-2.5-2.5.708-.708 2.5 2.5-.707.708zM3 10v.5a.5.5 0 0 0 .5.5H4v.5a.5.5 0 0 0 .5.5H5v.5a.5.5 0 0 0 .5.5H6v-1.5a.5.5 0 0 0-.5-.5H5v-.5a.5.5 0 0 0-.5-.5H3z"/>
 						</svg>
 					</ButtonCrud>
-					<ButtonCrud tipo="danger" onClick={()=>this.handleDeleteBtn(idx)}>
+					{typeof window.EditFormComponent?.delete==="boolean"&&!window.EditFormComponent.create ? null : <ButtonCrud tipo="danger" onClick={()=>this.handleDeleteBtn(idx)}>
 						<svg className="bi bi-trash-fill" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
 							<path fillRule="evenodd" d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5a.5.5 0 0 0-1 0v7a.5.5 0 0 0 1 0v-7z"/>
 						</svg>
-					</ButtonCrud>
+					</ButtonCrud>}
 				</div>
 			</th>
 		</tr>
@@ -237,7 +243,7 @@ render() {
 					</select>
 				</div>
 				<div className="col-md-6 mb-3 d-flex align-items-end justify-content-end pr-5">
-					
+				{ typeof window.EditFormComponent?.create==="boolean"&&!window.EditFormComponent.create ? null :
 					<ButtonCrud tipo="success" onClick={()=>this.handleCreateBtn()}>
 						Añadir{"  "}
 						<svg className="bi bi-plus-square" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -246,6 +252,7 @@ render() {
 						  <path fillRule="evenodd" d="M14 1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
 						</svg>
 					</ButtonCrud>
+					}
 				</div>
 			</div>
 		</form>
@@ -267,7 +274,7 @@ render() {
 				</tbody>
 			</table>
 		</div>
-		<Modal>
+		<Modal key="modal-data">
 			<div id="modal-data-table" className="modal" tabIndex="-1" role="dialog">
 				<div className="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
 					<div className="modal-content">
@@ -301,7 +308,11 @@ render() {
 								
 							>
 								{this.state.isDataChanged ?
-										(this.state.loadingUpdate ? "Guardando..." : "Guardar Cambios") 
+										(this.state.loadingUpdate ? (
+											this.state.rowIdEdit>=0 ? "Guardando..." : "Enviando..."
+										) : (
+											this.state.rowIdEdit>=0 ? "Guardar Cambios" : "Enviar"
+										)) 
 								: "Cerrar"}
 							</button>
 						</div>
@@ -309,7 +320,7 @@ render() {
 				</div>
 			</div>
 		</Modal>
-		<Modal>
+		<Modal key="modal-delete">
 			<div id="modal-delete-row" className="modal" tabIndex="-1" role="dialog">
 				<div className="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
 					<div className="modal-content">
@@ -365,46 +376,7 @@ render() {
 				</div>
 			</div>
 		</Modal>
-		{/*<Modal>
-			<div id="modal-create-row" className="modal" tabIndex="-1" role="dialog">
-				<div className="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
-					<div className="modal-content">
-						<div className="modal-header">
-							<h5 className="modal-title">
-								{window.EditFormComponent?.title ? EditFormComponent.title : "Crear un nuevo registro"}
-							</h5>
-							<button type="button" className="close" data-dismiss="modal" aria-label="Close">
-								<span aria-hidden="true">&times;</span>
-							</button>
-						</div>
-						<div className="modal-body">
-							<form className="needs-validation" id="form-data-create" method="POST" 
-								onSubmit={this.handleSubmitUpdateForm} noValidate
-							>
-								<input type="hidden" name="_token" value={$('meta[name="csrf-token"]').attr('content')} />
-								{window.EditFormComponent ? 
-									<EditFormComponent ref={this.formBodyRef} 
-										setDataChanged={this.setDataChanged}
-									/> 
-								: null}
-								<input type="hidden" name="id" id="rowid" />
-							</form>
-						</div>
-						<div className="modal-footer">
-							<button type="button" className="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-							<button onClick={this.clickSave} id="crear-registro" type="button"
-								className={"btn btn-"+(this.state.isDataChanged?"warning":"primary")}
-								
-							>
-								{this.state.isDataChanged ?
-										(this.state.loadingUpdate ? "Agregando..." : "Añadir") 
-								: "Cerrar"}
-							</button>
-						</div>
-					</div>
-				</div>
-			</div>
-		</Modal>*/}
+		{window.DataBottomComponents && <DataBottomComponents ref={window.DataBottomComponentsRef} />}
 		{this.state.alerta}
 	</>);
 }
@@ -412,76 +384,6 @@ render() {
 }
 
 export default Table;
-
-const modalRoot = document.getElementById('modal-root');
-const alertRoot = document.getElementById('alert-root');
-
-class Alert extends React.Component {
-	constructor(props) {
-		super(props);
-		//console.log("nueva alerta");
-		this.el = document.createElement('div');
-		this.el.id = new Date().getTime();
-	}
-
-	componentDidMount() {
-		//this.el = document.createElement('div');
-		alertRoot.appendChild(this.el);
-		//console.log("montado");
-	}
-
-	componentWillUnmount() {
-		alertRoot.removeChild(this.el);
-		//console.log("desmontado");
-	}
-
-	render() {
-		return ReactDOM.createPortal(
-			this.props.children||null,
-			this.el
-		);
-	}
-}
-
-class Modal extends React.Component {
-constructor(props) {
-	super(props);
-	this.el = document.createElement('div');
-}
-
-componentDidMount() {
-	// The portal element is inserted in the DOM tree after
-	// the Modal's children are mounted, meaning that children
-	// will be mounted on a detached DOM node. If a child
-	// component requires to be attached to the DOM tree
-	// immediately when mounted, for example to measure a
-	// DOM node, or uses 'autoFocus' in a descendant, add
-	// state to Modal and only render the children when Modal
-	// is inserted in the DOM tree.
-	modalRoot.appendChild(this.el);
-}
-
-/* componentDidUpdate(prevProps) {
-	if (this.props.isOpen !== prevProps.isOpen) {
-		if (this.props.isOpen) {
-			$(this.el).children(".modal").modal("show");
-		} else {
-			$(this.el).children(".modal").modal("hide");
-		}
-	}
-} */
-
-componentWillUnmount() {
-	modalRoot.removeChild(this.el);
-}
-
-render() {
-	return ReactDOM.createPortal(
-	this.props.children,
-	this.el
-	);
-}
-}
 
 const Pagination = (props) => {
 	return <div className="pagination-cnt">

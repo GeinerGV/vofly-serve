@@ -2,7 +2,7 @@ import React from "react"
 import {getDisplayPhone} from "../funciones"
 import {FormBody} from "./FormBodyComponent"
 
-window.COLUMNAS_TABLE = HEADS.filter(head=>head!=="#").map(head=>{
+export const USUARIOS_COLUMNAS_TABLE = window.COLUMNAS_TABLE = HEADS.filter(head=>head!=="#").map(head=>{
     let col = {displayName: head};
     switch (head) {
         case "Nombre":
@@ -17,7 +17,7 @@ window.COLUMNAS_TABLE = HEADS.filter(head=>head!=="#").map(head=>{
             break;
         case "Celular":
             col.getDisplayValue = (row) => {
-                return (row.phone||"").replace("+51", "");
+                return getDisplayPhone(row.phone||"");
             }
             break;
         case "Dirección":
@@ -29,7 +29,7 @@ window.COLUMNAS_TABLE = HEADS.filter(head=>head!=="#").map(head=>{
     return col;
 })
 
-class UsuariosEditForm extends FormBody {
+export class UsuariosEditForm extends FormBody {
 	state = {
         name: "",
         email: "",
@@ -44,9 +44,9 @@ class UsuariosEditForm extends FormBody {
             phone: getDisplayPhone(this.props.phone),
             direccion: this.props.direccion||""
         }
-	}
-
-	inputsProps = [
+    }
+    
+    static inputsProps = [
         {type:"text" ,className:"form-control" ,name:"name", label: "Nombre", 
             required: true
 		},
@@ -58,6 +58,8 @@ class UsuariosEditForm extends FormBody {
 			label:"Dirección"}
 
 	]
+
+	inputsProps = UsuariosEditForm.inputsProps;
 
     render () {
         let inputs = this.getInputs();

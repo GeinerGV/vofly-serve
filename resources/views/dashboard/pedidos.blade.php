@@ -1,6 +1,6 @@
 @extends('layouts.dashboard.table')
 @php
-	$heads = ["#", "Usuario", "Driver", "Origen", "Destino", "Pedido", "Plan", "Recorrido", "Estado"];
+	$heads = ["#", "trackid", "Usuario", "Driver", "Origen", "Destino", "Pedido", "Plan", "Recorrido", "Estado"];
 @endphp
 
 @section('title', 'Pedidos')
@@ -20,6 +20,7 @@
 			<td>{{$item->phone}}</td>
             <td>{{$item->direccion}}</td> --}}
             <th scope="row">{{++$row}}</th>
+            <td><small>{{$item->trackid}}</small></td>
             <td>{{isset($item->user) ? $item->user->phone : $item->user_id}}</td>
             <td>{{isset($item->driver) ? $item->driver->dni : ""}}</td>
             <td>{{$item->recogible->place->direccion}}</td>

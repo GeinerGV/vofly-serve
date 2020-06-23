@@ -10,17 +10,21 @@ export class FormBody extends React.Component {
         super(props)
     }
 
-    inputsProps = []
-
-    componentDidUpdate(prevProps) {
-		const props = this.props;
+	inputsProps = []
+	
+	static super_componentDidUpdate = (_this, prevProps) => {
+		const props = _this.props;
         if (Object.keys(props).some((key)=>props[key]!==prevProps[key]) || 
 			Object.keys(prevProps).some((key)=>props[key]!==prevProps[key])) {
 			$("#form-data .is-invalid").removeClass("is-invalid");
-            this.setState(this.propsToState(), ()=>{
-				if (this.props.setDataChanged) this.props.setDataChanged(this.isDataChanged());
+            _this.setState(_this.propsToState(), ()=>{
+				if (_this.props.setDataChanged) _this.props.setDataChanged(_this.isDataChanged());
 			});
         }
+	}
+
+    componentDidUpdate(prevProps, prevState) {
+		FormBody.super_componentDidUpdate(this, prevProps);
     }
 
 	isDataChanged = ()=>{

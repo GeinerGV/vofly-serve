@@ -394,7 +394,7 @@ window.initMap = function () {
 
 	var interval = setInterval(()=>{
 		if (DELIVERY_DATA.estado!=="Enviado") {
-			axios.post("/tack", {
+			axios.post("/track", {
 				id: DELIVERY_DATA.trackid
 			}).then(res=>{
 				if (res.data?.delivery) {

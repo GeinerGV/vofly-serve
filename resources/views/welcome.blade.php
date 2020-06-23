@@ -75,7 +75,7 @@
 										<h5 class="card-title">VoFly App</h5>
 										<p class="card-text">Aplicación para los usuarios que desean realizar sus pedidos</p>
 										<div class="d-flex justify-content-center flex-wrap">
-											<a href="/apks/vofly-app-e4915640f5d04d5aa70c91ff67bd4586-signed.apk" download="vofly-app-3.apk" class="btn btn-primary mx-a">
+											<a href="/apks/vofly-app-4ca03821f0b74f88aaeb9359ddb3a3a7-signed.apk" download="vofly-app-4.apk" class="btn btn-primary mx-a">
 												<img width="35px" alt='APK disponible' src='/images/android.png'/>
 												Descárga el APK
 											</a>

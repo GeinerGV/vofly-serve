@@ -33,6 +33,7 @@ class PagosEditForm extends FormBody {
 
 	static title = "Editar plan de pago"
 
+	// static delete = true;
 	
 	state = {
 		descripcion: "",

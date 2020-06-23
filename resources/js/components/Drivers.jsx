@@ -1,5 +1,8 @@
 import React from "react"
 import {FormBody} from "./FormBodyComponent"
+import { UsuariosEditForm } from "./Usuarios"
+import {getDisplayPhone} from "../funciones"
+//import {USUARIOS_COLUMNAS_TABLE, UsuariosEditForm} from "./Usuarios"
 
 const Check = () => {
 	return <div style={{color: "var(--success)", textAlign: "center"}}>
@@ -76,23 +79,43 @@ class DriverFormUpdate extends FormBody {
 	state = {
 		dni: "",
 		verified_at: false,
+		name: "",
+		email: "",
+		phone: "",
+		direccion: "",
 	}
 	
 	propsToState = () => {
 		return {
 			dni: this.props.dni||"",
-			verified_at: !!this.props.verified_at
+			verified_at: !!this.props.verified_at,
+			name: this.props.user?.name||"",
+			email: this.props.user?.email||"",
+			phone: getDisplayPhone(this.props.user?.phone||""),
+			direccion: this.props.user?.direccion||""
 		}
 	}
 
-	inputsProps = [
+	constructor(props) {
+		super(props)
+	}
+
+	componentDidUpdate(prevProps, prevState) {
+		super.componentDidUpdate(prevProps);
+		if (prevState.select_user!==this.state.select_user) {
+			
+		}
+	}
+
+
+	inputsProps =  [
 		{type:"text" ,className:"form-control" ,name:"dni", label: "DNI", 
 			required: true, minLength: 8, maxLength: 8
 		},
 		{type:"checkbox" ,className:"form-check-input" ,name:"verified_at", label: "Habilitado",
 		},
 
-	]
+	].concat(UsuariosEditForm.inputsProps);
 
 	isValidForm = () => {
 		//let isValid = super.isValidForm();
@@ -102,16 +125,35 @@ class DriverFormUpdate extends FormBody {
 	render() {
         let inputs = this.getInputs();
 		return <>
-			<div className="form-group">
-				{inputs.dni}
-			</div>
 			<div className="form-row">
-				<div className="col">
-					<div className="form-check">
-						{inputs.verified_at}
+				<div className="form-group col-sm-6">
+					{inputs.dni}
+				</div>
+				<div className="form-group col-sm-6">
+					<label className="text-white d-none d-sm-block" style={{userSelect: "none"}}>Habilitado</label>
+					<div className="form-control">
+						<div className="form-check">
+							{inputs.verified_at}
+						</div>
 					</div>
 				</div>
 			</div>
+			<div className="form-row">
+                <div className="form-group col-md-6">
+                    {inputs.name}
+                </div>
+                <div className="form-group col-md-6">
+                    {inputs.email}
+                </div>
+            </div>
+            <div className="form-row">
+                <div className="form-group col-md-6">
+                    {inputs.phone}
+                </div>
+                <div className="form-group col-md-6">
+                    {inputs.direccion}
+                </div>
+            </div>
 		</>
 	}
 }
