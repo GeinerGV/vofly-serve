@@ -384,7 +384,7 @@ window.initMap = function () {
 		label: "E"
 	})
 
-	var driver = !DELIVERY_DATA.driver ? null : new google.maps.Marker({
+	var driver = !DELIVERY_DATA.driver?.location ? null : new google.maps.Marker({
 		position: parseCoordToLatLng(DELIVERY_DATA.driver.location),
 		map: map,
 		title: "Driver",
@@ -400,7 +400,7 @@ window.initMap = function () {
 				if (res.data?.delivery) {
 					DELIVERY_DATA = {...DELIVERY_DATA, ...res.data.delivery}
 					if (DELIVERY_DATA.driver) {
-						AddExtra(parseCoordToLatLng(DELIVERY_DATA.driver.location))
+						if(DELIVERY_DATA.driver.location) AddExtra(parseCoordToLatLng(DELIVERY_DATA.driver.location))
 					}
 				}
 			})

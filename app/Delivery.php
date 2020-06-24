@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Casts\Json;
+use App\Casts\ParseNumber;
 use Illuminate\Database\Eloquent\Model;
 
 class Delivery extends Model
@@ -30,6 +31,7 @@ class Delivery extends Model
 	protected $casts = [
 		'location' => Json::class,
 		'trayectoria' => Json::class,
+		//'precio_plan' => ParseNumber::class,
 	];
 
 	public const STATUS_INICIADO = "Iniciado";

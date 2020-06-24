@@ -1,5 +1,5 @@
 import React from "react"
-import {distanciaFormatoStr, getEstado, getDisplayPhone} from "../funciones"
+import {distanciaFormatoStr, getEstado, getDisplayPhone, getDisplayPrecio} from "../funciones"
 import {FormBody} from "./FormBodyComponent"
 import { Modal } from "./ComunComponents";
 
@@ -65,7 +65,7 @@ window.COLUMNAS_TABLE = HEADS.filter(head=>head!=="#").map(head=>{
 			break;
 		case "Plan":
 			col.getDisplayValue = (row) => {
-				return row.plan.nombre;
+				return row.plan?.nombre||getDisplayPrecio(row.precio_plan);
 			}
 			break;
 		case "Recorrido":
@@ -175,7 +175,7 @@ render() {
 						{this.state.trackid?<div style={{width: "100%", height:"100%", position: "absolute", top:0, left:0}} 
 							dangerouslySetInnerHTML={{
 								__html: this.state.trackid && 
-									`<iframe src="/track?id=${this.state.trackid}&embed=true" width="100%" height="100%"></iframe>`
+									`<iframe src="/track?id=${this.state.trackid}&embed=true" frameborder="0" width="100%" height="100%"></iframe>`
 							}}
 						/>:null}
 					</div>

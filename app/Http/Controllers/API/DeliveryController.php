@@ -54,6 +54,9 @@ class DeliveryController extends Controller
 			'distancia' => ["integer"],
 			'type' => ['required', "in:DELIVERY_PAQUETE"],
 		])->validate();
+		Validator::make(['pago'=>$request->pago["id"]], [
+			'pago' => ['required', "exists:delivery_plans,id"],
+		])->validate();
 		$result = [];
 		$delivery = new Delivery;
 		if ($request->distancia) $delivery->distancia = $request->distancia;
@@ -89,9 +92,11 @@ class DeliveryController extends Controller
 		#$entrega->delivery()->save($delivery);
 
 		# Pago
+		
 		$plan = DeliveryPlan::find($request->pago['id']);
 		$delivery->plan()->associate($plan);
-		
+		$delivery->precio_plan = $plan->precio;
+
 		# USER
 		$delivery->user()->associate(Auth::user());
 

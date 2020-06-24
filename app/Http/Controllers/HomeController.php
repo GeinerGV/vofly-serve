@@ -148,7 +148,7 @@ class HomeController extends Controller
 				"id" => ["required", "exists:deliveries"]
 			]);
 			$phone = "+51" . $request->user;
-			$validator2 = Validator::make(["user" => $phone], $request->filled("user") ? [
+			$validator2 = Validator::make(["user" => $phone], $request->has("user") ? [
 				"user" => ['exists:users,phone']
 			] : []);
 			if (!$validator->fails() && !$validator2->fails()) {
@@ -157,11 +157,15 @@ class HomeController extends Controller
 					$delivery->trackid = $request->trackid;
 				}
 				if ($request->has('driver')) {
-					$driver = Driver::where("dni", $request->driver)->first();
-					if ($driver) {
-						$delivery->driver_id = $driver->id;
-						$delivery->load("driver");
+					if ($request->driver) {
+						$driver = Driver::where("dni", $request->driver)->first();
+						if ($driver) {
+							$delivery->driver_id = $driver->id;
+						}
+					} else {
+						$delivery->driver_id = null;
 					}
+					$delivery->load("driver");
 				}
 				if ($request->has('user')) {
 					$user = User::where("phone", $phone)->first();
@@ -454,8 +458,8 @@ class HomeController extends Controller
 				$alert = $this->usuarioPost($request);
 				if ($alert[0]=="success") {
 					$ele = Driver::find($request->id);
-					if ($request->filled("dni")) $ele->dni = $request->dni;
-					if ($request->filled("verified_at")) {
+					if ($request->has("dni")) $ele->dni = $request->dni;
+					if ($request->has("verified_at")) {
 						/**
 						 * @var Database
 						 */

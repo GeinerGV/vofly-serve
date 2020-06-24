@@ -26,7 +26,7 @@
             <td>{{$item->recogible->place->direccion}}</td>
             <td>{{$item->entregable->place->direccion}}</td>
             <td>{{$item->cargable->tipo}}</td>
-            <td>{{$item->plan->nombre}}</td>
+            <td>{{isset($item->plan) ? $item->plan->nombre : $item->precio_plan}}</td>
             <td>{{$item->distanciaFormatoStr()}}</td>
             <td>{{$item->getEstado()}}</td>
 		</tr>

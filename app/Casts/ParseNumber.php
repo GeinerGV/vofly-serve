@@ -17,7 +17,7 @@ class ParseNumber implements CastsAttributes
      */
     public function get($model, $key, $value, $attributes)
     {
-        return $value ? floatval($value) : $value;
+        return isset($value) ? floatval($value) : $value;
     }
 
     /**

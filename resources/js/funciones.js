@@ -50,8 +50,8 @@ export function isFloat(n) {
 	return Number(n) === n && Number(n) % 1 !== 0;
 }
 
-export function getDisplayPrecio(precio) {
-    return !Number.isNaN(Number(precio)) ? Number(precio).toFixed(2) : "";
+export function getDisplayPrecio(precio, defecto = "") {
+    return !Number.isNaN(Number(precio)) && precio!==null && (precio+"").length ? "S/. " + (new Number(precio).toFixed(2).replace(".", ",")) : defecto;
 }
 
 export function distanciaFormatoStr(distancia) {

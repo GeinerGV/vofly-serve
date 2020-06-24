@@ -11,6 +11,8 @@
     </head>
     <body>
 @endif
+	<div id="pedido">
+	</div>
     <div id="map">
     </div>
     @auth
