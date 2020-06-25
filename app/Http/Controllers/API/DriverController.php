@@ -22,7 +22,9 @@ class DriverController extends Controller
 			Validator::make($request->all(), [
 				"location"=>["required", 'array']
 			])->validate();
-			$driver->location = $request->location;
+			if (!$driver->location || $driver->location["timestamp"]<=$request->location["timestamp"]) {
+				$driver->location = $request->location;
+			}
 			$driver->save();
 			if ($pedido=$driver->currentPedido()) {
 				if (!$pedido->last_location_time || 
