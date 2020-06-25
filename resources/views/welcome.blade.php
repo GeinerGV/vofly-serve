@@ -75,7 +75,7 @@
 										<h5 class="card-title">VoFly App</h5>
 										<p class="card-text">Aplicación para los usuarios que desean realizar sus pedidos</p>
 										<div class="d-flex justify-content-center flex-wrap">
-											<a href="/apks/vofly-app-4ca03821f0b74f88aaeb9359ddb3a3a7-signed.apk" download="vofly-app-4.apk" class="btn btn-primary mx-a">
+											<a href="/apks/vofly-app-e8d72d82cb2444ce9f1998669587366a-signed.apk" download="vofly-app-6.apk" class="btn btn-primary mx-a">
 												<img width="35px" alt='APK disponible' src='/images/android.png'/>
 												Descárga el APK
 											</a>
@@ -94,7 +94,7 @@
 									  <h5 class="card-title">VoFly Driver</h5>
 									  <p class="card-text">Aplicación para nuestros repartidores de pedidos</p>
 									  <div class="d-flex justify-content-center flex-wrap">
-											<a href="/apks/vofly-driver-app-815433e043b14ea6bc3a747138366b56-signed.apk" download="vofly-driver-3.1.apk" class="btn btn-primary">
+											<a href="/apks/vofly-driver-app-bbcfd83f18f34be48944aa309881549d-signed.apk" download="vofly-driver-6.apk" class="btn btn-primary">
 												<img width="35px" alt='APK disponible' src='/images/android.png'/>
 												Descarga el APK
 											</a>
