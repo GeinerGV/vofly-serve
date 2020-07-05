@@ -305,7 +305,7 @@ window.initMap = function () {
 	var myLatLng = {lat: -12.047188130329875, lng: -77.02250618487597}
 	var zoom = calcZoomFromLongitudeDelta(0.35100638);
 	var map = new google.maps.Map(document.getElementById("map"), {
-		zoom: zoom,
+		zoom: 12,
 		center: myLatLng,
 		mapTypeControlOptions: {
 			mapTypeIds: ['roadmap', 'satellite', 'hybrid', 'terrain',

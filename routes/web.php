@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,7 +41,9 @@ Route::get('/track', 'GeneralController@trackid');
 Route::post('/track', 'GeneralController@trackid');
 
 Route::get('/tmp', function(Request $request) {
-    $result = [DB::table('deliveries')->select("id")->get()];
+    //$result = [DB::table('deliveries')->select("id")->get()];
+    $result = [];
+    $result["hash"] = Hash::make("@dm1nCarlos123456");
     return response()->json($result);
 });
 

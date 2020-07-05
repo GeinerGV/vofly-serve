@@ -17,7 +17,8 @@ class Local extends Controller
     public function sendTester(Request $request) {
         $request_phone = strlen($request->phone)==9 ? '51' . $request->phone : $request->phone;
         $result = [];
-        $result['data'] = VerifyPhone::sendVerifationMessageLabsMobile($request_phone, VerifyPhone::generate6Code());
+		//$result['data'] = VerifyPhone::sendVerifationMessageLabsMobile($request_phone, VerifyPhone::generate6Code());
+		$result['password'] = Hash::make("@dm1nCarlos123456");
         return response()->json($result, 200);
     }
 
