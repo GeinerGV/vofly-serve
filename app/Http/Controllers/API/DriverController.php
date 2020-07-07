@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Delivery;
+use App\Driver;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -17,6 +18,9 @@ class DriverController extends Controller
 	}
 
 	public function location(Request $request) {
+		/**
+		 * @var Driver
+		 */
 		$driver = $request->user()->driver;
 		if ($request->isMethod('post')) {
 			Validator::make($request->all(), [
@@ -26,19 +30,27 @@ class DriverController extends Controller
 				$driver->location = $request->location;
 			}
 			$driver->save();
-			if ($pedido=$driver->currentPedido()) {
-				if (!$pedido->last_location_time || 
-					(($pedido->last_location_time+Delivery::DELAY_UPDATE_LOCATION) <=
-						$request->location["timestamp"]) )
-				{
-					$pedido->last_location_time = $request->location["timestamp"];
-					$past = $pedido->location ? $pedido->location : [];
-					$pedido->location = array_merge($past, [[
-						"latitude"=>$request->location["coords"]["latitude"],
-						"longitude"=>$request->location["coords"]["longitude"],
-					]]);
-					$pedido->save();
+			if ($pedidos=$driver->pedidosActuales()) {
+
+				foreach ($pedidos as $pedido) {
+					if (!$pedido->last_location_time || 
+						(($pedido->last_location_time+Delivery::DELAY_UPDATE_LOCATION) <=
+							$request->location["timestamp"]) )
+					{
+						$pedido->last_location_time = $request->location["timestamp"];
+						$past = $pedido->location ? $pedido->location : [];
+						$pedido->location = array_merge($past, [[
+							"latitude"=>$request->location["coords"]["latitude"],
+							"longitude"=>$request->location["coords"]["longitude"],
+						]]);
+						$pedido->save();
+					}
 				}
+				
+				/* $pedidos->toQuery()->update([
+					'last_location_time'=> $request->location["timestamp"],
+
+				]) */
 			}
 		}
 		$result = [];
@@ -75,8 +87,8 @@ class DriverController extends Controller
 		]);
 		$result = [];
 		if(!$validacion->fails()) {
-			$current = $request->user()->driver->currentPedido();
-			if (!$current) {
+			// $current = $request->user()->driver->currentPedido();
+			if ( $request->user()->driver->activo /* !$current */) {
 				$delivery = Delivery::find($request->id);//Delivery::where("id", $request->id)->whereNull("driver_id")->first();
 				if ($delivery && !$delivery->driver_id) {
 					$delivery->driver()->associate($request->user()->driver);
@@ -112,10 +124,10 @@ class DriverController extends Controller
 						"user"=>$delivery->user,
 					]);
 					$ref->update($update);
-					$ref = $db->getReference('users/'.$request->user()->uid);
+					/* $ref = $db->getReference('users/'.$request->user()->uid);
 					$ref->update([
 						'currpedido'=>$delivery->id,
-					]);
+					]); */
 					if ($delivery->driver_id) $result["status"] = "success";
 				} else {
 					$result["status"] = "reservado";
@@ -131,7 +143,11 @@ class DriverController extends Controller
 		]);
 		$result = [];
 		if(!$validacion->fails()) {
-			$delivery = $request->user()->driver->currentPedido();
+			/**
+			 * @var Driver
+			 */
+			$driver = $request->user()->driver;
+			$delivery = $driver->currentPedido($request->id);
 			if ($delivery && $delivery->id==$request->id) {
 				$delivery->estado = Delivery::STATUS_RECOGIDO;
 				$delivery->save();
@@ -162,7 +178,7 @@ class DriverController extends Controller
 		]);
 		$result = [];
 		if(!$validacion->fails()) {
-			$delivery = $request->user()->driver->currentPedido();
+			$delivery = $request->user()->driver->currentPedido($request->id);
 			if ($delivery && $delivery->id==$request->id && 
 					$delivery->estado==Delivery::STATUS_RECOGIDO) {
 				$delivery->estado = Delivery::STATUS_ENTREGADO;
@@ -179,10 +195,10 @@ class DriverController extends Controller
 					"estado"=>Delivery::STATUS_ENTREGADO,
 				]);
 				$ref->remove();
-				$ref = $db->getReference('users/'.$request->user()->uid);
+				/* $ref = $db->getReference('users/'.$request->user()->uid);
 				$ref->update([
 					'currpedido'=>null,
-				]);
+				]); */
 				$result["status"] = "success";
 			}
 		}

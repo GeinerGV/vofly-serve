@@ -41,10 +41,21 @@ class Driver extends Model
 		return !!$current;
 	}
 
-	public function currentPedido() {
+	public function currentPedido($id = null) {
 		$current = $this->deliveries()->where(function ($query) {
 			$query->where("estado", '<>', "Enviado")->orWhereNull("estado");
+		})->where(function ($query) use ($id) {
+			if ($id) {
+				$query->where("id", $id);
+			}
 		})->first();
+		return $current;
+	}
+
+	public function pedidosActuales() {
+		$current = $this->deliveries()->where(function ($query) {
+			$query->where("estado", '<>', "Enviado")->orWhereNull("estado");
+		})->get();
 		return $current;
 	}
 	

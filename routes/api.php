@@ -37,6 +37,7 @@ Route::group(['middleware' => 'auth:api'], function() {
         Route::get('historial', 'API\DeliveryController@historial');
         Route::get('pedidos', 'API\DeliveryController@pedidos');
         Route::get('currpedido', 'API\DeliveryController@currentPedido');
+        Route::get('currpedidos', 'API\DeliveryController@pedidosActuales');
         Route::post('isactive', 'API\DriverController@isActive');
         Route::get('isactive', 'API\DriverController@isActive');
 		Route::prefix('app')->group(function () {

@@ -288,4 +288,11 @@ class DeliveryController extends Controller
 		$result["delivery"] = $request->user()->driver->currentPedido();
 		return response()->json($result);
 	}
+
+	public function pedidosActuales(Request $request) {
+		$result = [];
+		$result["deliveries"] = $request->user()->driver->pedidosActuales();
+		$result["deliveries"]->load("recojo.place", "entrega.place", "plan", "carga");
+		return response()->json($result);
+	}
 }
