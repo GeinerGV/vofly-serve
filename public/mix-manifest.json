@@ -1,16 +1,16 @@
 {
     "/js/app.js": "/js/app.js?id=df4cefef722ff7fe91c2",
-    "/js/components/Drivers.js": "/js/components/Drivers.js?id=344297505e621a7075ce",
-    "/js/components/Pagos.js": "/js/components/Pagos.js?id=7d812d047d4337698c99",
-    "/js/components/Pedidos.js": "/js/components/Pedidos.js?id=f8678219dd9633afe75f",
+    "/js/components/Drivers.js": "/js/components/Drivers.js?id=2fb98b7e07f99975999e",
+    "/js/components/Pagos.js": "/js/components/Pagos.js?id=e782cfa398ef628b9d81",
+    "/js/components/Pedidos.js": "/js/components/Pedidos.js?id=ae37da9089cb8da48283",
     "/js/components/Table.js": "/js/components/Table.js?id=4e85921bb42667287ba2",
-    "/js/components/Usuarios.js": "/js/components/Usuarios.js?id=ec9174fa9f2bcd2340be",
-    "/js/dashboard.js": "/js/dashboard.js?id=2b339ed536f87b6f0e25",
+    "/js/components/Usuarios.js": "/js/components/Usuarios.js?id=07456014380ce9ea598a",
+    "/js/dashboard.js": "/js/dashboard.js?id=7974fed3beb32fb14a4e",
     "/css/app.css": "/css/app.css?id=2a818204824cd5a0f5de",
     "/css/vendor.css": "/css/vendor.css?id=1c66d4e793cff4b64e5c",
     "/css/page/home.css": "/css/page/home.css?id=117285bd370c4ecafcd7",
     "/css/page/track.css": "/css/page/track.css?id=acd048701a9906c80221",
-    "/js/funciones.js": "/js/funciones.js?id=fef4a34980b34bea2711",
+    "/js/funciones.js": "/js/funciones.js?id=dead811d8abe902c91e7",
     "/js/tables.js": "/js/tables.js?id=27a18a54800785f7dcbd",
     "/js/track.js": "/js/track.js?id=2f177c83ec482f02676e"
 }

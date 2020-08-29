@@ -56,7 +56,7 @@ export function getDisplayPrecio(precio, defecto = "") {
 
 export const getMedidas = ({alto, ancho, largo}={}) => {
 	if (!alto && !ancho && !largo) return "";
-	return (volumen.alto||"-") + " x " + (volumen.ancho||"-") + " x " + (volumen.largo||"-") + " (cm)";
+	return (alto||"-") + " x " + (ancho||"-") + " x " + (largo||"-") + " (cm)";
 }
 
 export const isFragil = (fragil) => {
