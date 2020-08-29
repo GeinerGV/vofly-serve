@@ -54,6 +54,22 @@ export function getDisplayPrecio(precio, defecto = "") {
     return !Number.isNaN(Number(precio)) && precio!==null && (precio+"").length ? "S/. " + (new Number(precio).toFixed(2).replace(".", ",")) : defecto;
 }
 
+export const getMedidas = ({alto, ancho, largo}={}) => {
+	if (!alto && !ancho && !largo) return "";
+	return (volumen.alto||"-") + " x " + (volumen.ancho||"-") + " x " + (volumen.largo||"-") + " (cm)";
+}
+
+export const isFragil = (fragil) => {
+	if (typeof fragil == "undefined") return "";
+	if (fragil) return "SI";
+	return "NO";
+}
+
+export const getPeso = (peso) => {
+	if (!peso) return "";
+	return peso + " kg";
+}
+
 export function distanciaFormatoStr(distancia) {
     if (!distancia) return "";
     if (distancia<1000) {

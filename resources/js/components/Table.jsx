@@ -2,11 +2,13 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {Alert, Modal} from "./ComunComponents"
 
-const ButtonCrud = (props) => {
+import ButtonCrud from "./ButtonCrud";
+
+/*const ButtonCrud = (props) => {
 	return <button type="button" className={"ml-1 btn btn-"+(props.tipo||"primary")} onClick={props.onClick}>
 		{props.children}
 	</button>
-}
+}*/
 //data-toggle="modal" data-target="#modal-data-table"
 
 class Table extends React.Component {
@@ -19,6 +21,7 @@ constructor(props) {
 		isDataChanged: false,
 		loadingUpdate: false,
 		rowIdEdit: undefined,
+		modalType: undefined,
 		loadingDelete: false,
 		alerta: undefined,
 	}
@@ -42,8 +45,15 @@ handleChangeLenRows = (event) => {
 	this.setState({lenRows: event.target.value});
 }
 
+handleGeneralBtn = (rowid, type) => {
+	this.setState({rowIdEdit: rowid, modalType: type}, ()=> {
+		$("#modal-general-table").modal("show");
+		//console.log(this.getRowToEdit(), rowid);
+	})
+}
+
 handleEditBtn = (rowid) => {
-	this.setState({rowIdEdit: rowid, }, ()=> {
+	this.setState({rowIdEdit: rowid}, ()=> {
 		$("#modal-data-table").modal("show");
 		//console.log(this.getRowToEdit(), rowid);
 	})
@@ -213,13 +223,17 @@ render() {
 			})}			
 			<th scope="col" key={"row-"+idx+"col-"+this.props.current_page+"-crud"}>
 				<div style={{display: "flex", flexFlow: "row nowrap"}}>
-					<ButtonCrud onClick={()=>this.handleEditBtn(idx)}>
+					{window.TableActionsButtons ? 
+							<TableActionsButtons table={this} idx={idx}
+							/> 
+						: null}
+					<ButtonCrud onClick={()=>this.handleEditBtn(idx)} className="order-1">
 						<svg className="bi bi-pencil" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
 							<path fillRule="evenodd" d="M11.293 1.293a1 1 0 0 1 1.414 0l2 2a1 1 0 0 1 0 1.414l-9 9a1 1 0 0 1-.39.242l-3 1a1 1 0 0 1-1.266-1.265l1-3a1 1 0 0 1 .242-.391l9-9zM12 2l2 2-9 9-3 1 1-3 9-9z"/>
 							<path fillRule="evenodd" d="M12.146 6.354l-2.5-2.5.708-.708 2.5 2.5-.707.708zM3 10v.5a.5.5 0 0 0 .5.5H4v.5a.5.5 0 0 0 .5.5H5v.5a.5.5 0 0 0 .5.5H6v-1.5a.5.5 0 0 0-.5-.5H5v-.5a.5.5 0 0 0-.5-.5H3z"/>
 						</svg>
 					</ButtonCrud>
-					{typeof window.EditFormComponent?.delete==="boolean"&&!window.EditFormComponent.create ? null : <ButtonCrud tipo="danger" onClick={()=>this.handleDeleteBtn(idx)}>
+					{typeof window.EditFormComponent?.delete==="boolean"&&!window.EditFormComponent.create ? null : <ButtonCrud tipo="danger" onClick={()=>this.handleDeleteBtn(idx)} className="order-3">
 						<svg className="bi bi-trash-fill" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
 							<path fillRule="evenodd" d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5a.5.5 0 0 0-1 0v7a.5.5 0 0 0 1 0v-7z"/>
 						</svg>
@@ -274,6 +288,18 @@ render() {
 				</tbody>
 			</table>
 		</div>
+		<Modal key="modal-general">
+			<div id="modal-general-table" className="modal" tabIndex="-1" role="dialog">
+				<div className="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+					<div className="modal-content">
+						{window.GeneralModalContent ? 
+							<GeneralModalContent {...this.getRowToEdit()}  type={this.state.modalType} idx={this.state.rowIdEdit}
+							/> 
+						: null}
+					</div>
+				</div>
+			</div>
+		</Modal>
 		<Modal key="modal-data">
 			<div id="modal-data-table" className="modal" tabIndex="-1" role="dialog">
 				<div className="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">

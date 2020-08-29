@@ -45,5 +45,7 @@
 @section('scripts')
 
 @include('layouts.dashboard.edittable', ['pagination'=>$pagination, 'heads'=>$heads])
+<script src="https://printjs-4de6.kxcdn.com/print.min.js"></script>
+<link href="https://printjs-4de6.kxcdn.com/print.min.css" rel="stylesheet">
 <script src="{{ mix("/js/components/Pedidos.js") }}"></script>
 @endsection

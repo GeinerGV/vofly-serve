@@ -59,7 +59,7 @@ class HomeController extends Controller
 						}
 						$pagination = $data::latest()->paginate($len, ['*'], 'pag', $pag);
 						foreach ($pagination as &$item) {
-							$item->load("user", "driver", "carga", "recojo.place", "plan", "entrega.place");
+							$item->load("user", "driver", "driver.user", "carga", "recojo.place", "plan", "entrega.place");
 						}
 						break;
 					case 'usuarios':
