@@ -52,6 +52,7 @@ class DeliveryController extends Controller
 			'pago' => ['required', "array"],
 			'detalles_carga' => ['string'],
 			'distancia' => ["integer"],
+			'duracion' => ["integer"],
 			'type' => ['required', "in:DELIVERY_PAQUETE"],
 		])->validate();
 		Validator::make(['pago'=>$request->pago["id"]], [
@@ -60,6 +61,7 @@ class DeliveryController extends Controller
 		$result = [];
 		$delivery = new Delivery;
 		if ($request->distancia) $delivery->distancia = $request->distancia;
+		if ($request->duracion) $delivery->duracion_media = $request->duracion;
 		if ($request->trayectoria) $delivery->trayectoria = $request->trayectoria;
 		if ($request->detallesCarga) $delivery->detalles_carga = $request->detallesCarga;
 		$delivery->type = $request->type;
